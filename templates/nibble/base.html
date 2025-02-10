@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>replit</title>
+  <title>{% block "title" %}{% endblock %}</title>
   <!-- WORK ON URLS STATIC FILES -->
   <link href="style.css" rel="stylesheet" type="text/css" />
   <!-- /WORK ON URLS STATIC FILES -->
@@ -17,7 +17,7 @@
 </head>
 
 <body>
-    <!-- HERE {{CONTENT BLOCK }}-->
+   {% block "content" %}{% endblock %}
 </body>
 
 </html>
