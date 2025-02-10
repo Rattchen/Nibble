@@ -1,0 +1,168 @@
+<a href="board.html">Board</a>
+
+<div class="user-profile">
+    <div class="user-profile-header">
+
+        <h1>
+            <img /> 👤
+            Person1
+        </h1>
+        <h5>
+            Graphic design specialist
+        </h5>
+        <p>
+            <b>Points </b>: 32
+        </p>
+
+        <p id="bio">
+            Loram ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec lacus nec mauris blandit molest.
+        </p>
+    </div>
+
+    <div class="user-profile-activity">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane"
+                    type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">2025</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane"
+                    type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">2024</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane"
+                    type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">2021</button>
+            </li>
+
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane"
+                    type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Temp</button>
+
+                <!-- custom that one can move later somewhere, like i did "THIS WEEK TODO -->
+
+            </li>
+            </li>
+        </ul>
+
+
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
+                tabindex="0">
+
+                <button>+</button>
+                <div>
+                    <!--make it collapsible-->
+                    <div class="input-group mb-3">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Type</button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">CAT1</a></li>
+                            <li><a class="dropdown-item" href="#">CAT2</a></li>
+                            <li><a class="dropdown-item" href="#">CAT3</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Custom</a></li>
+                        </ul>
+
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Priority</button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">🔴 Urgent</a></li>
+                            <li><a class="dropdown-item" href="#">🟠 Important</a></li>
+                            <li><a class="dropdown-item" href="#">🟡 </a></li>
+                            <li><a class="dropdown-item" href="#">🟢 </a></li>
+                        </ul>
+
+                        <input type="date" placeholder="Date" class="btn" text="...m" />
+
+                        <!-- Make the button smaller -->
+
+
+                        <!-- TODO: Custom otwiera modal w którym się podaje wartość. Albo otwiera kolejny collapse, ale modal lepiej wyglądać będzie -->
+
+                        <input type="text" class="form-control" aria-label="Text input with dropdown button">
+                    </div>
+                </div>
+
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <span class="list-project-name">🔴 <a href="#" class="task-project-anchor">Project No
+                                1</a></span> - task
+                        XYZ, task ABC, task 123 <span>📅🕕</span>
+                        <span class="badge text-bg-primary rounded-pill">14 pts</span>
+                    </li>
+                    <!-- TODO: Merge tasks from the same project into one and sum the points -->
+
+                    <!-- TODO: priority for tasks as a 🔴🟠🟡🟢; for people who see no color it might also have a number inside or something -->
+
+
+                    <li class="list-group-item task-finished">🟢 A second task <span>📅🕕</span>
+                        <span class="badge text-bg-primary rounded-pill">3 pts</span>
+                    </li>
+                    <li class="list-group-item">A third item
+                        <span class="badge text-bg-primary rounded-pill">0 pts</span>
+                    </li>
+                    <li class="list-group-item">
+                        <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckboxStretched">
+                        <label class="form-check-label stretched-link" for="firstCheckboxStretched" x-trigger="click"
+                            hx-swap="outerHTML">[CAT] Custom item</label> <span>📅🕕</span> <span
+                            class="badge text-bg-primary rounded-pill">2 pts</span>
+
+                    </li>
+                    <li class="list-group-item">A fourth item
+                        <span class="badge text-bg-primary rounded-pill">2 pts</span>
+                    </li>
+                    <li class="list-group-item"><u>And <b>a <i>fifth </i> </u> one with Markdown</b>
+                        <!-- ADD MARKDOWN -->
+
+                        <span class="badge text-bg-primary rounded-pill">2 pts</span>
+                    </li>
+                </ul>
+                <!-- https://getbootstrap.com/docs/5.3/components/list-group/ tu jest pokazane zeby pill był po prawo -->
+
+            </div>
+            <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                ...
+            </div>
+            <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
+                ...
+            </div>
+            <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab"
+                tabindex="0">
+                ...
+            </div>
+        </div>
+    </div>
+
+    <div id="project-footer">
+        <div id="logs">
+            <h5> Logs
+                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLogs"
+                    aria-expanded="false" aria-controls="collapseLogs">
+                    v
+                </button>
+            </h5>
+
+            <div class="collapse" id="collapseLogs">
+                <div>
+                    <div class="log-entry">
+                        <div class="log-date text-muted">23.12.2012, 13:37</div>
+                        <p class="log-description"><b>👤Person1</b> added a task <i>Test 123</i></p>
+                    </div>
+                    <div class="log-entry">
+                        <div class="log-date text-muted">02.01.2025, 17:13</div>
+                        <p class="log-description"><b>👤Person1</b> renamed <i>AAA</i> to <i>An Actual Task!</i></p>
+                    </div>
+                    <div class="log-entry">
+                        <div class="log-date text-muted">16.05.2027, 20:01</div>
+                        <p class="log-description"><b>👤Person1</b> finished task <i>Make it great again</i> X days
+                            before the
+                            deadline/<u><b>X days late</b></u></p>
+                        <!-- good idea to keep track because it helps to see patterns in people for yearly feedbacks -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
