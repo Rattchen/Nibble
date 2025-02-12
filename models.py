@@ -39,37 +39,6 @@ class Board(models.Model):
     def __str__(self):
         return self.name
 
-class Column(models.Model):
-    name = models.CharField(max_length=100)
-    board = models.ForeignKey(Board, on_delete=models.CASCADE)
-    order_index = models.IntegerField()
-
-    def __str__(self):
-        return self.name
-
-class Card(models.Model):
-    name = models.CharField(max_length=50)
-    order_index = models.IntegerField()
-    owner = models.ForeignKey(
-        NibbleProfile, on_delete=models.CASCADE, related_name="owner")
-    helper = models.ForeignKey(
-        NibbleProfile, on_delete=models.CASCADE, related_name="helper")
-    # TODO: Change the owner and helper field name
-    due_datetime = models.DateTimeField()
-    description = models.TextField()
-    column = models.ForeignKey(Column, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
-
-class Attachment(models.Model):
-    name = models.CharField(max_length=50)
-    url = models.URLField()
-    card = models.ForeignKey(Card, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
-
 class Label(models.Model):
     name = models.CharField(max_length=100)
     color = models.CharField(max_length=7, unique=True)
@@ -78,14 +47,46 @@ class Label(models.Model):
     def __str__(self):
         return self.name
 
-class Checklist(models.Model):
-    name = models.CharField(max_length=50)
-    order_index = models.IntegerField()
-    card = models.ForeignKey(Card, on_delete=models.CASCADE)
-    # TODO: An indicator of how many % is already finished
+class Column(models.Model):
+    name = models.CharField(max_length=100)
+    board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name="columns")
+    order_index = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return self.name
+
+class Card(models.Model):
+    name = models.CharField(max_length=50)
+    order_index = models.IntegerField(null=True, blank=True)
+    owner = models.ForeignKey(
+        NibbleProfile, null=True, blank=True, on_delete=models.CASCADE, related_name="owner")
+    helper = models.ForeignKey(
+        NibbleProfile, null=True, blank=True, on_delete=models.CASCADE, related_name="helper")
+    # TODO: Change the owner and helper field names
+    label = models.ManyToManyField(Label)
+    due_datetime = models.DateTimeField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    column = models.ForeignKey(Column, on_delete=models.CASCADE, related_name="cards")
+
+    def __str__(self):
+        return self.name
+
+class Attachment(models.Model):
+    name = models.CharField(max_length=50)
+    url = models.URLField()
+    card = models.ForeignKey(Card, on_delete=models.CASCADE, related_name="attachments")
+
+    def __str__(self):
+        return self.name
+
+class Checklist(models.Model):
+    name = models.CharField(max_length=50)
+    order_index = models.IntegerField(null=True, blank=True)
+    card = models.ForeignKey(Card, on_delete=models.CASCADE, related_name="checklists")
+    # TODO: An indicator of how many % is already finished
+
+    def __str__(self):
+        return f"\'{self.name}\' in \'{self.card.name}\' card"
 
 class TaskType(models.Model):
     name = models.CharField(max_length=50)
@@ -96,14 +97,14 @@ class TaskType(models.Model):
 
 class Task(models.Model):
     name = models.CharField(max_length=100)
-    order_index = models.IntegerField()
+    order_index = models.IntegerField(null=True, blank=True)
     checklist = models.ForeignKey(Checklist, on_delete=models.CASCADE)
-    task_type = models.ForeignKey(TaskType, on_delete=models.CASCADE)
-    priority = models.CharField(max_length=50)
+    task_type = models.ForeignKey(TaskType, null=True, blank=True, on_delete=models.CASCADE)
+    priority = models.CharField(max_length=50, null=True, blank=True)
     # TODO: Create a subclass Priority
-    due_datetime = models.DateTimeField()
+    due_datetime = models.DateTimeField(null=True, blank=True)
     points = models.IntegerField()
-    assigned_to = models.ForeignKey(NibbleProfile, on_delete=models.CASCADE)
+    assigned_to = models.ForeignKey(NibbleProfile, on_delete=models.CASCADE, null=True, blank=True)
     is_finished = models.BooleanField()
 
     def __str__(self):
