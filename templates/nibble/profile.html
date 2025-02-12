@@ -1,4 +1,8 @@
-<a href="board.html">Board</a>
+{% extends "nibble/base.html" %}
+{% block "title" %}Nibble user profile{% endblock %}
+{% block "content" %}
+
+<a href="{% url 'board' %}">Board</a>
 
 <div class="user-profile">
     <div class="user-profile-header">
@@ -87,7 +91,7 @@
 
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
-                        <span class="list-project-name">🔴 <a href="#" class="task-project-anchor">Project No
+                        <span class="list-project-name">🔴 <a href="{% url 'card' %}" class="task-project-anchor">Project No
                                 1</a></span> - task
                         XYZ, task ABC, task 123 <span>📅🕕</span>
                         <span class="badge text-bg-primary rounded-pill">14 pts</span>
@@ -144,25 +148,10 @@
                 </button>
             </h5>
 
-            <div class="collapse" id="collapseLogs">
-                <div>
-                    <div class="log-entry">
-                        <div class="log-date text-muted">23.12.2012, 13:37</div>
-                        <p class="log-description"><b>👤Person1</b> added a task <i>Test 123</i></p>
-                    </div>
-                    <div class="log-entry">
-                        <div class="log-date text-muted">02.01.2025, 17:13</div>
-                        <p class="log-description"><b>👤Person1</b> renamed <i>AAA</i> to <i>An Actual Task!</i></p>
-                    </div>
-                    <div class="log-entry">
-                        <div class="log-date text-muted">16.05.2027, 20:01</div>
-                        <p class="log-description"><b>👤Person1</b> finished task <i>Make it great again</i> X days
-                            before the
-                            deadline/<u><b>X days late</b></u></p>
-                        <!-- good idea to keep track because it helps to see patterns in people for yearly feedbacks -->
-                    </div>
-                </div>
-            </div>
+            {% include "nibble/partials/logs.html" %}
+
         </div>
     </div>
 </div>
+
+{% endblock %}

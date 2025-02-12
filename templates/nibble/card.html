@@ -1,3 +1,7 @@
+{% extends "nibble/base.html" %}
+{% block "title" %}Nibble card{% endblock %}
+{% block "content" %}
+
 <div class="project-card">
     <div id="project-toolbar">
         <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
@@ -30,8 +34,8 @@
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="board.html">Board</a></li>
-                    <li class="breadcrumb-item"><a href="#">Category</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'board' %}">Board</a></li>
+                    <li class="breadcrumb-item">Column</li>
                     <li class="breadcrumb-item active" aria-current="page">Project No 1</li>
                 </ol>
             </nav>
@@ -50,7 +54,7 @@
     <div id="project-body">
         <div id="project-description">
             <div id="">
-                Owner: 👤Person1 <br />
+                Owner: <a href="{% url 'profile' %}"> 👤Person1 </a> <br />
                 Helper: 👤Person3 <br />
                 Due date: 📅01 July, 🕕12:00
             </div>
@@ -82,114 +86,11 @@
                 Checklists <button>+</button>
             </h3>
 
-            <div>
-                <span>ListName</span> <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                    v
-                </button>
-            </div>
-            <div class="collapse" id="collapseExample">
-                <button>+</button>
-                <div>
-                    <!--make it collapsible-->
-                    <div class="input-group mb-3">
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">Type</button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">🎨 Grafika</a></li>
-                            <li><a class="dropdown-item" href="#">✒️ Tekst</a></li>
-                            <li><a class="dropdown-item" href="#">😭 Organizacja</a></li>
-                            <li><a class="dropdown-item" href="#">📞Kontakt</a></li>
-                        </ul>
-
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">Priority</button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">🔴 Urgent</a></li>
-                            <li><a class="dropdown-item" href="#">🟠 Important</a></li>
-                            <li><a class="dropdown-item" href="#">🟡 </a></li>
-                            <li><a class="dropdown-item" href="#">🟢 </a></li>
-                        </ul>
-
-                        <input type="date" placeholder="Date" class="btn" text="...m" />
-                        <div class="card card-body">
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    <input class="form-check-input me-1" type="checkbox" value=""
-                                        id="firstCheckboxStretched">
-                                    <label class="form-check-label stretched-link" for="firstCheckboxStretched"
-                                        x-trigger="click" hx-swap="outerHTML">First checkbox</label> <span>📅🕕</span>
-                                    <span>2 pts</span> <span class="task-assigned">👤</span>
-
-                                    <!--Check "Inline Task Editing" in ChatGPT if in doubt-->
-
-
-                                </li>
-                                <li class="list-group-item">
-                                    <input class="form-check-input me-1" type="checkbox" value=""
-                                        id="secondCheckboxStretched">
-                                    <label class="form-check-label stretched-link" for="secondCheckboxStretched">Second
-                                        checkbox</label><span>📅🕕</span><span> 3 pts</span><span
-                                        class="task-assigned">👤</span>
-                                </li>
-                                <li class="list-group-item">
-                                    <input class="form-check-input me-1" type="checkbox" value=""
-                                        id="thirdCheckboxStretched">
-                                    <label class="form-check-label stretched-link" for="thirdCheckboxStretched">Third
-                                        checkbox</label>
-                                    <span><a href="#" data-bs-toggle="tooltip"
-                                            data-bs-title="Default tooltip">📅🕕</a></span><span>1
-                                        pt</span><span class="task-assigned">✒️</span>
-                                </li>
-                                <!-- https://www.w3schools.com/css/css_tooltip.asp if bootstrap doesn't work or sth -->
-
-                            </ul>
-                        </div>
-                    </div>
-
-
-                    <div>
-                        <span>Some other list</span> <button class="btn btn-primary" type="button"
-                            data-bs-toggle="collapse" data-bs-target="#collapseExample2" aria-expanded="false"
-                            aria-controls="collapseExample2">
-                            v
-                        </button>
-                    </div>
-                    <div class="collapse" id="collapseExample2">
-                        <div class="card card-body">
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    <input class="form-check-input me-1" type="checkbox" value=""
-                                        id="firstCheckboxStretched2">
-                                    <label class="form-check-label stretched-link" for="firstCheckboxStretched2"
-                                        x-trigger="click" hx-swap="outerHTML">Some checkbox</label> <span>📅🕕</span>
-                                    <span>5 pts</span> <span class="task-assigned">👤</span>
-
-                                </li>
-                                <li class="list-group-item">
-                                    <input class="form-check-input me-1" type="checkbox" value=""
-                                        id="secondCheckboxStretched2">
-                                    <label class="form-check-label stretched-link"
-                                        for="secondCheckboxStretched2">Checkbox</label><span>📅🕕</span><span> 1
-                                        pt</span><span class="task-assigned">🎨</span>
-                                </li>
-                                <li class="list-group-item">
-                                    <input class="form-check-input me-1" type="checkbox" value=""
-                                        id="thirdCheckboxStretched2">
-                                    <label class="form-check-label stretched-link" for="thirdCheckboxStretched2">A few
-                                        more
-                                        tasks</label> <span><a href="#" data-bs-toggle="tooltip"
-                                            data-bs-title="Default tooltip">📅🕕</a></span><span>3 pts</span><span
-                                        class="task-assigned">👤</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% include "nibble/partials/checklist.html" %}
 
         </div>
-        <div id="project-footer">
+    </div>
+    <div id="project-footer">
             <div id="logs">
                 <h5> Logs
                     <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
@@ -198,52 +99,23 @@
                     </button>
                 </h5>
 
-                <div class="collapse" id="collapseLogs">
-                    <div>
-                        <div class="log-entry">
-                            <div class="log-date text-muted">23.12.2012, 13:37</div>
-                            <p class="log-description"><b>👤Person1</b> added a task <i>Test 123</i></p>
-                        </div>
-                        <div class="log-entry">
-                            <div class="log-date text-muted">02.01.2025, 17:13</div>
-                            <p class="log-description"><b>👤Person3</b> renamed <i>AAA</i> to <i>An Actual Task!</i></p>
-                        </div>
-                        <div class="log-entry">
-                            <div class="log-date text-muted">16.05.2027, 20:01</div>
-                            <p class="log-description"><b>👤Person1</b> assigned <b>👤 Person5</b> to task <i>Make it
-                                    great
-                                    again</i></p>
-                        </div>
-                    </div>
-                </div>
+                {% include "nibble/partials/logs.html" %}
 
-                <div id="comments">
+            </div>
+
+             <div id="comments">
                     <h5> Comments
                         <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
                             data-bs-target="#collapseComments" aria-expanded="false" aria-controls="collapseComments">
                             v
                         </button>
                     </h5>
-                    <div class="collapse" id="collapseComments">
-                        <div class="comment-entry">
-                            <div class="comment-date text-muted">16.05.2017, 23:57</div>
-                            <span class="commenter"><img />👤 Person1:</span>
-                            <span class="comment">lmao</span>
-                        </div>
-                        <div class="comment-entry">
-                            <div class="comment-date text-muted">17.05.2017, 00:03</div>
-                            <span class="commenter"><img />👤 Person2:</span>
-                            <span class="comment">that's bad</span>
-                        </div>
-                        <div class="comment-entry">
-                            <div class="comment-date text-muted">17.05.2017, 16:31</div>
-                            <span class="commenter"><img />👤 Person3:</span>
-                            <span class="comment"><b class="ping">@Person2</b> take a look pls</span>
-                        </div>
-                    </div>
+                    {% include "nibble/partials/comments.html" %}
                 </div>
             </div>
-            <!-- change .commenter to .nick? or just .bold, I doubt I'd have to get this specific to have .commenter. Same with different .x-date, i can have .date or even just .muted-->
         </div>
     </div>
-</div>
+    
+
+
+{% endblock %}

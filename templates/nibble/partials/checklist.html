@@ -1,0 +1,74 @@
+<div>
+    <span>ListName</span> <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
+        data-bs-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2">
+        v
+    </button>
+</div>
+
+<div class="collapse" id="collapseExample2">
+    <div class="card card-body">
+        <ul class="list-group">
+            <li class="list-group-item">
+                <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckboxStretched2">
+                <label class="form-check-label stretched-link" for="firstCheckboxStretched2" x-trigger="click"
+                    hx-swap="outerHTML"><span class="list-project-name">🔴 <a href="{% url 'card' %}"
+                            class="task-project-anchor">Check the resource</a></span> to gain knowledge
+                    <span>📅🕕</span>
+                    <span class="badge text-bg-primary rounded-pill">14 pts</span> <span class="task-assigned">👤</span>
+                </label>
+            </li>
+            <li class="list-group-item">
+                <input class="form-check-input me-1" type="checkbox" value="" id="secondCheckboxStretched2">
+                <label class="form-check-label stretched-link" for="secondCheckboxStretched2"> 🟢 A second task
+                    <span>📅🕕</span>
+                    <span class="badge text-bg-primary rounded-pill">3 pts</span> <span class="task-assigned">🎨</span>
+                </label>
+            </li>
+
+            <li class="list-group-item">
+                <input class="form-check-input me-1" type="checkbox" value="" id="secondCheckboxStretched3">
+                <label class="form-check-label stretched-link" for="secondCheckboxStretched3"> 🟢 <u>And <b>a <i>fifth </i> </u> one with
+                    Markdown</b>
+                    <span>📅🕕</span>
+                    <span class="badge text-bg-primary rounded-pill">3 pts</span> <span class="task-assigned">👤</span>
+                </label>
+            </li>
+        </ul>
+
+        <!-- Input to add a new task -->
+
+        <hr/>
+
+        <div class="input-group mb-3">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">Type</button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">🎨 Grafika</a></li>
+                    <li><a class="dropdown-item" href="#">✒️ Tekst</a></li>
+                    <li><a class="dropdown-item" href="#">😭 Organizacja</a></li>
+                    <li><a class="dropdown-item" href="#">📞Kontakt</a></li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="#">Custom</a></li>
+            </ul>
+
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">Priority</button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">🔴 Urgent</a></li>
+                <li><a class="dropdown-item" href="#">🟠 Important</a></li>
+                <li><a class="dropdown-item" href="#">🟡 </a></li>
+                <li><a class="dropdown-item" href="#">🟢 </a></li>
+            </ul>
+
+            <input type="date" placeholder="Date" class="btn" text="...m" />
+
+            <!-- Make the button smaller -->
+
+
+            <!-- TODO: Custom otwiera modal w którym się podaje wartość. Albo otwiera kolejny collapse, ale modal lepiej wyglądać będzie -->
+
+            <input type="text" class="form-control" aria-label="Text input with dropdown button">
+        </div>
+    </div>
+</div>
