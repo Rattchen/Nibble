@@ -1,34 +1,19 @@
 {% extends "nibble/base.html" %}
-{% block "title" %}Nibble board{% endblock %}
+{% block "title" %}{{board.name}}{% endblock %}
 {% block "content" %}
 
 <div id="board-container">
-    <h1 class="text">My Board</h1>
+    <h1 class="text">{{board.name}}</h1>
     <div class="board-wrapper">
+        {% for column in columns %}
         <div class="column">
-            <h3>Column 1</h3>
-            <b style="color: red; font-size: small;">column.orderID = 1</b>
-            {% include "nibble/partials/card-small.html" %}
-            {% include "nibble/partials/card-small.html" %}
+            <h3>{{column.name}}</h3>
+            {% for card in column.card_list %}
+            {% include "nibble/partials/card-small.html" with card=card %}
+            {% endfor %}
+
         </div>
-        <div class="column">
-            <h3>Column 2</h3>
-            {% include "nibble/partials/card-small.html" %}
-            {% include "nibble/partials/card-small.html" %}
-         
-        </div>
-        <div class="column">
-            <h3>Column 3</h3>
-            {% include "nibble/partials/card-small.html" %}
-           
-        </div>
-        <div class="column">
-            <h3>Column 4</h3>
-            {% include "nibble/partials/card-small.html" %}
-            {% include "nibble/partials/card-small.html" %}
-            {% include "nibble/partials/card-small.html" %}
-            
-        </div>
+        {% endfor %}
     </div>
 </div>
 

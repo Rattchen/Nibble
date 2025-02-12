@@ -1,23 +1,40 @@
 <div class="board-card card">
     <div class="board-card-header">
         <div class="board-card-info">
-            <b style="color: red; font-size: small;">project.orderID = 1</b>
-            <span class="partof">🟢 Part of <b class="label-parent">Event 1</b></span> || <span>⚙️</span>
+             <span>⚙️</span>
             <!-- ⚙️ tylko na PC z opcjami typu 🗑️ delete, 🗃️ archive, 📄 copy; na telefonie nie ma sensu bo sie nie zmieści-->
-
             <br />
-            <span class="badge rounded-pill text-bg-primary">Label1</span>
-            <span class="badge rounded-pill text-bg-primary">Label2</span>
+            {% for label in card.label.all %}
+            <span class="badge rounded-pill" style="background:{{label.color}}">{{label.name}}</span>
+            {% endfor %}
             <br />
-
             <!-- change spans to divs so i don't need this br and make it all make more sense xd -->
             <h5>
-                <a href="{% url 'card' %}">Project No 1</a>
+                <a href="{% url 'card' %}">{{card.name}}</a>
             </h5>
-            <span>📅01 July, 🕕12:00</span> || <span>👤👤👤</span>
+            {% if card.due_datetime %}
+            <span>📅🕕{{card.due_datetime}}</span>
+            {% endif %}
+            {% if card.owner %}
+            || <span>👤</span>
+            {% endif %}
+            {% if card.helper %}
+            <span>👤</span>
+            {% endif %}
         </div>
-        🔄 2
-        ☑️ 2/10
+        {% for i in card.attachments.all %}
+        🔄
+        {% endfor %}
+       
+        {% if card.checklists %}
+            {% for checklist in card.checklists.all %}
+            ☑️
+            {% endfor %}
+        {% endif %}
+
+        <!-- TODO: Show number of attachments instead of an emoji for each 
+        +
+        Show the number of finished tasks of all tasks, as in 2/10, 21/30 -->
     </div>
 
 </div>
