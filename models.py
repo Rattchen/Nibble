@@ -12,26 +12,6 @@ class NibbleProfile(models.Model):
     def __str__(self):
         return f"{self.user.username}'s Profile"
 
-class Log(models.Model):
-    # TODO: Check out django simple history
-
-    # TODO: Rename and change to FK
-    belongs_to = models.CharField(max_length=50)
-    datetime = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(NibbleProfile, on_delete=models.CASCADE)
-    log_type = models.CharField(max_length=50)
-    # TODO: Change to an enum with types "assigned a person", "renamed something", "added Task/Checklist" etc
-    target = models.CharField(max_length=50)
-    additional = models.CharField(max_length=50, null=True, blank=True)
-    # TODO: Rename; it holds additional info like past name of a task or who was assigned
-
-class Comment(models.Model):
-    # TODO: Rename and change to FK
-    belongs_to = models.CharField(max_length=50)
-    datetime = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(NibbleProfile, on_delete=models.CASCADE)
-    content = models.TextField()
-
 
 class Board(models.Model):
     name = models.CharField(max_length=100)
@@ -109,3 +89,26 @@ class Task(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Log(models.Model):
+    # TODO: Check out django simple history
+
+    # TODO: Rename and change to FK
+    belongs_to = models.CharField(max_length=50)
+    datetime = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(NibbleProfile, on_delete=models.CASCADE)
+    log_type = models.CharField(max_length=50)
+    # TODO: Change to an enum with types "assigned a person", "renamed something", "added Task/Checklist" etc
+    target = models.CharField(max_length=50)
+    additional = models.CharField(max_length=50, null=True, blank=True)
+    # TODO: Rename; it holds additional info like past name of a task or who was assigned
+
+class Comment(models.Model):
+    card = models.ForeignKey(Card, on_delete=models.CASCADE, related_name="comments")
+    datetime = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(NibbleProfile, on_delete=models.CASCADE)
+    content = models.TextField()
+
+    def __str__(self):
+        return f"{self.author} commented on {self.card}"

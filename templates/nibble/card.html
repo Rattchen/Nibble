@@ -114,8 +114,6 @@
                     </button>
                 </h5>
 
-                
-
                 {% include "nibble/partials/logs.html" %}
 
             </div>
@@ -127,7 +125,7 @@
                             v
                         </button>
                     </h5>
-                    {% include "nibble/partials/comments.html" %}
+                    {% include "nibble/partials/comments.html" with comments=card.comments.all %}
             </div>
         </div>
     </div>
