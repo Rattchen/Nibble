@@ -10,7 +10,7 @@
             <br />
             <!-- change spans to divs so i don't need this br and make it all make more sense xd -->
             <h5>
-                <a href="{% url 'card' %}">{{card.name}}</a>
+                <a href="{% url 'card' card.id %}">{{card.name}}</a>
             </h5>
             {% if card.due_datetime %}
             <span>📅🕕{{card.due_datetime}}</span>

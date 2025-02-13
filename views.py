@@ -1,5 +1,5 @@
 from django.views.generic import TemplateView, DetailView
-from .models import Board
+from .models import Board, Card
 
 class IndexView(TemplateView):
     template_name = 'nibble/index.html'
@@ -21,4 +21,7 @@ class BoardView(DetailView):
             column.card_list = column.cards.all()
         return context
 
+class CardView(DetailView):
+    model = Card
+    template_name = 'nibble/card.html'
 

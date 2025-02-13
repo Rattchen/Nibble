@@ -1,5 +1,5 @@
 {% extends "nibble/base.html" %}
-{% block "title" %}Nibble card{% endblock %}
+{% block "title" %}{{card.name}}{% endblock %}
 {% block "content" %}
 
 <div class="project-card">
@@ -27,26 +27,31 @@
     </div>
     <div class="project-header">
         <div class="labels">
-            <span class="badge rounded-pill text-bg-primary">Label1</span>
-            <span class="badge rounded-pill text-bg-primary">Label2</span>
+            {% for label in card.label.all %}
+            <span class="badge rounded-pill" style="background:{{label.color}}">{{label.name}}</span>
+            {% endfor %}            
             <button>+</button>
         </div>
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'board' %}">Board</a></li>
-                    <li class="breadcrumb-item">Column</li>
-                    <li class="breadcrumb-item active" aria-current="page">Project No 1</li>
+                    <li class="breadcrumb-item"><a href="{% url 'board' card.column.board.id %}">{{card.column.board.name}}</a></li>
+                    <li class="breadcrumb-item">{{card.column.name}}</li>
+                    <li class="breadcrumb-item active" aria-current="page">{{card.name}}</li>
                 </ol>
             </nav>
         </div>
 
-        <div id="protect-assigned">
-            👤👤👤👤
+        <div id="protect-assigned" style="color:red;">
+            {% for checklist in card.checklists.all%}
+                {% for task in checklist.tasks.all %}
+                {{task.assigned_to.avatar}}
+                {% endfor %}
+            {% endfor %}
         </div>
         <div id="project-title">
             <h1>
-                Project No 1
+                {{card.name}}
             </h1>
         </div>
 
@@ -54,16 +59,25 @@
     <div id="project-body">
         <div id="project-description">
             <div id="">
-                Owner: <a href="{% url 'profile' %}"> 👤Person1 </a> <br />
-                Helper: 👤Person3 <br />
-                Due date: 📅01 July, 🕕12:00
+                {% if card.owner %}
+                Owner: <a href="{% url 'profile' %}"> {{card.owner.avatar}} {{card.owner.user.username}} </a> <br />
+                {% endif %}
+                {% if card.helper %}
+                Owner: <a href="{% url 'profile' %}"> {{card.helper.avatar}} {{card.helper.user.username}} </a> <br />
+                {% endif %}
+                {% if card.due_datetime %}
+                <span>📅🕕{{card.due_datetime}}</span>
+                {% endif %}
             </div>
             <br />
             <div class="attachments">
                 <h3>Attachments <button>+</button></h3>
                 <ul>
-                    <li><a href="#">A link</a></li>
-                    <li><a href="#">Another link</a></li>
+                    {% for attachment in card.attachments.all %}
+                    <li><a href="{{attachment.url}}">{{attachment.name}}</a></li>
+                    {% empty %}
+                    <p> No attachments added yet. </p>
+                    {% endfor %}
                 </ul>
             </div>
             <br />
@@ -71,14 +85,11 @@
                 <h3>
                     Description
                 </h3>
-
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                    aliquip ex
-                    ea commodo.
-                </p>
+                    {% if card.description %}
+                    <p>{{card.description}}</p>
+                    {% else %}
+                    <textarea></textarea>
+                    {% endif %}
             </div>
         </div>
         <div id="project-lists-all">
@@ -86,11 +97,15 @@
                 Checklists <button>+</button>
             </h3>
 
-            {% include "nibble/partials/checklist.html" %}
+            {% for checklist in card.checklists.all %}
+                {% include "nibble/partials/checklist.html" with checklist=checklist %}
+                {% empty %}
+                    <h5> There's no tasklist yet :< Create one! </h5>
+            {% endfor %}
 
         </div>
     </div>
-    <div id="project-footer">
+        <div id="project-footer">
             <div id="logs">
                 <h5> Logs
                     <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
@@ -98,6 +113,8 @@
                         v
                     </button>
                 </h5>
+
+                
 
                 {% include "nibble/partials/logs.html" %}
 
@@ -111,10 +128,10 @@
                         </button>
                     </h5>
                     {% include "nibble/partials/comments.html" %}
-                </div>
             </div>
         </div>
     </div>
+</div>
     
 
 

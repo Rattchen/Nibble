@@ -98,7 +98,7 @@ class TaskType(models.Model):
 class Task(models.Model):
     name = models.CharField(max_length=100)
     order_index = models.IntegerField(null=True, blank=True)
-    checklist = models.ForeignKey(Checklist, on_delete=models.CASCADE)
+    checklist = models.ForeignKey(Checklist, on_delete=models.CASCADE, related_name="tasks")
     task_type = models.ForeignKey(TaskType, null=True, blank=True, on_delete=models.CASCADE)
     priority = models.CharField(max_length=50, null=True, blank=True)
     # TODO: Create a subclass Priority
