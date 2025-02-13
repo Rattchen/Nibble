@@ -1,57 +1,36 @@
 {% extends "nibble/base.html" %}
-{% block "title" %}Nibble user profile{% endblock %}
+{% block "title" %}{{profile.user.username}}{% endblock %}
 {% block "content" %}
-
-<a href="{% url 'board' %}">Board</a>
 
 <div class="user-profile">
     <div class="user-profile-header">
 
-        <h1>
-            <img /> 👤
-            Person1
-        </h1>
-        <h5>
-            Graphic design specialist
-        </h5>
-        <p>
-            <b>Points </b>: 32
-        </p>
-
-        <p id="bio">
-            Loram ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec lacus nec mauris blandit molest.
-        </p>
+        <h1><img />{{profile.avatar}} {{profile.user.username}}</h1>
+        <h6><i>@{{profile.handle}}</i></h6>
+        <h4>{{profile.specialization}}</h4>
+        <p><b>Points:</b> {{profile.points}}</p>
+        <p id="bio">{{profile.bio}}</p>
     </div>
 
     <div class="user-profile-activity">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
+            {% for year, _ in tasks_by_year.items %}
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane"
-                    type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">2025</button>
+                <button class="nav-link {% if forloop.first %}active{% endif %}"" id="{{year}}-tab" data-bs-toggle="tab" data-bs-target="#{{year}}-tab-pane"
+                    type="button" role="tab" aria-controls="{{year}}-tab-pane" aria-selected="{% if forloop.first %}true{%else%}false{% endif %}">{{year}}</button>
             </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane"
-                    type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">2024</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane"
-                    type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">2021</button>
-            </li>
+            {% endfor %}
 
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane"
-                    type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Temp</button>
+                <button class="nav-link" id="temp-tab" data-bs-toggle="tab" data-bs-target="#temp-tab-pane"
+                    type="button" role="tab" aria-controls="temp-tab-pane" aria-selected="false">Temp</button>
 
-                <!-- custom that one can move later somewhere, like i did "THIS WEEK TODO -->
-
-            </li>
             </li>
         </ul>
-
-
+        {% for year, tasks in tasks_by_year.items %}
         <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
-                tabindex="0">
+            <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="{{year}}-tab-pane" role="tabpanel" aria-labelledby="{{year}}-tab"
+                tabindex="{{year}}">
 
                 <button>+</button>
                 <div>
@@ -90,51 +69,61 @@
                 </div>
 
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        <span class="list-project-name">🔴 <a href="{% url 'card' %}" class="task-project-anchor">Project No
-                                1</a></span> - task
-                        XYZ, task ABC, task 123 <span>📅🕕</span>
-                        <span class="badge text-bg-primary rounded-pill">14 pts</span>
+                    {% for task in tasks %}
+                    <li class="list-group-item {% if task.is_finished %}task-finished{% endif %}">
+                        {% if task.priority %}
+                        <span>{{task.priority}}</span>
+                        {% endif %}
+                        <span>{{task.name}}</span>
+                        {% if task.due_datetime %}
+                        <span>📅 {{task.due_datetime|date:"d/m"}} | 🕕 {{task.due_datetime|date:"H:i"}}</span>
+                        {% endif %}
+                        <span class="badge text-bg-primary rounded-pill">{{task.points}} pts</span>
+                        {% if task.assigned_to %}
+                        <span class="task-assigned">{{task.assigned_to.avatar}}</span>
+                        {% else %}
+                        <span>{{task.task_type.name}}</span>
+                        {% endif %}
                     </li>
-                    <!-- TODO: Merge tasks from the same project into one and sum the points -->
-
-                    <!-- TODO: priority for tasks as a 🔴🟠🟡🟢; for people who see no color it might also have a number inside or something -->
-
-
-                    <li class="list-group-item task-finished">🟢 A second task <span>📅🕕</span>
-                        <span class="badge text-bg-primary rounded-pill">3 pts</span>
-                    </li>
-                    <li class="list-group-item">A third item
-                        <span class="badge text-bg-primary rounded-pill">0 pts</span>
-                    </li>
-                    <li class="list-group-item">
-                        <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckboxStretched">
-                        <label class="form-check-label stretched-link" for="firstCheckboxStretched" x-trigger="click"
-                            hx-swap="outerHTML">[CAT] Custom item</label> <span>📅🕕</span> <span
-                            class="badge text-bg-primary rounded-pill">2 pts</span>
-
-                    </li>
-                    <li class="list-group-item">A fourth item
-                        <span class="badge text-bg-primary rounded-pill">2 pts</span>
-                    </li>
-                    <li class="list-group-item"><u>And <b>a <i>fifth </i> </u> one with Markdown</b>
-                        <!-- ADD MARKDOWN -->
-
-                        <span class="badge text-bg-primary rounded-pill">2 pts</span>
-                    </li>
+                    {% endfor %}
                 </ul>
+                <!-- TODO: Merge tasks from the same project into one and sum the points -->
+                <!-- TODO: priority for tasks as a 🔴🟠🟡🟢; for people who see no color it might also have a number inside or something -->
                 <!-- https://getbootstrap.com/docs/5.3/components/list-group/ tu jest pokazane zeby pill był po prawo -->
+            </div>
+            {% endfor %}
+            <div class="tab-pane fade" id="temp-tab-pane" role="tabpanel" aria-labelledby="temp-tab" tabindex="0">
+                <button>+</button>
+                <div>
+                    <!--make it collapsible-->
+                    <div class="input-group mb-3">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Type</button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">CAT1</a></li>
+                            <li><a class="dropdown-item" href="#">CAT2</a></li>
+                            <li><a class="dropdown-item" href="#">CAT3</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Custom</a></li>
+                        </ul>
 
-            </div>
-            <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-                ...
-            </div>
-            <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
-                ...
-            </div>
-            <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab"
-                tabindex="0">
-                ...
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Priority</button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">🔴 Urgent</a></li>
+                            <li><a class="dropdown-item" href="#">🟠 Important</a></li>
+                            <li><a class="dropdown-item" href="#">🟡 </a></li>
+                            <li><a class="dropdown-item" href="#">🟢 </a></li>
+                        </ul>
+
+                        <input type="date" placeholder="Date" class="btn" text="...m" />
+                        <input type="text" class="form-control" aria-label="Text input with dropdown button">
+                    </div>
+                </div>
+                <ul class="list-group list-group-flush">
+                </ul>
             </div>
         </div>
     </div>
@@ -147,9 +136,7 @@
                     v
                 </button>
             </h5>
-
             {% include "nibble/partials/logs.html" %}
-
         </div>
     </div>
 </div>

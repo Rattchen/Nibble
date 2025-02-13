@@ -60,10 +60,10 @@
         <div id="project-description">
             <div id="">
                 {% if card.owner %}
-                Owner: <a href="{% url 'profile' %}"> {{card.owner.avatar}} {{card.owner.user.username}} </a> <br />
+                Owner: <a href="{% url 'profile' card.owner.handle %}"> {{card.owner.avatar}} {{card.owner.user.username}} </a> <br />
                 {% endif %}
                 {% if card.helper %}
-                Owner: <a href="{% url 'profile' %}"> {{card.helper.avatar}} {{card.helper.user.username}} </a> <br />
+                Owner: <a href="{% url 'profile' card.helper.handle %}"> {{card.helper.avatar}} {{card.helper.user.username}} </a> <br />
                 {% endif %}
                 {% if card.due_datetime %}
                 <span>📅🕕{{card.due_datetime}}</span>
@@ -100,7 +100,7 @@
             {% for checklist in card.checklists.all %}
                 {% include "nibble/partials/checklist.html" with checklist=checklist %}
                 {% empty %}
-                    <h5> There's no tasklist yet :< Create one! </h5>
+                    <h5> There's no tasklist yet :&lt; Create one! </h5>
             {% endfor %}
 
         </div>

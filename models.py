@@ -3,14 +3,17 @@ from django.conf import settings
 
 class NibbleProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    handle = models.CharField(max_length=30, unique=True) 
+    # TODO: automatic creation and update when user changes their nickname
     points = models.IntegerField(default=0)
     specialization = models.CharField(max_length=50, default='')
-    bio = models.TextField(default='')
+    # TODO: Many specializations
+    bio = models.TextField(default='', null=True, blank=True)
     # TODO: Change to an ImageField
     avatar = models.CharField(max_length=50, default='👤')
 
     def __str__(self):
-        return f"{self.user.username}'s Profile"
+        return f"@{self.handle} ({self.user.username})"
 
 
 class Board(models.Model):
@@ -84,7 +87,7 @@ class Task(models.Model):
     # TODO: Create a subclass Priority
     due_datetime = models.DateTimeField(null=True, blank=True)
     points = models.IntegerField()
-    assigned_to = models.ForeignKey(NibbleProfile, on_delete=models.CASCADE, null=True, blank=True)
+    assigned_to = models.ForeignKey(NibbleProfile, on_delete=models.CASCADE, null=True, blank=True, related_name="user_tasks")
     is_finished = models.BooleanField()
 
     def __str__(self):
