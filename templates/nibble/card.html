@@ -49,24 +49,32 @@
                 {% endfor %}
             {% endfor %}
         </div>
+
         <div id="project-title">
-            <h1>
+            <h1 hx-get="{% url 'card_edit' card.id 'name' %}" hx-target="this" hx-swap="outerHTML">
                 {{card.name}}
             </h1>
         </div>
-
     </div>
+
     <div id="project-body">
         <div id="project-description">
             <div id="">
                 {% if card.owner %}
-                Owner: <a href="{% url 'profile' card.owner.handle %}"> {{card.owner.avatar}} {{card.owner.user.username}} </a> <br />
+                Owner: <span hx-get="{% url 'card_edit' card.id 'owner' %}" hx-target="this" hx-swap="outerHTML">{{card.owner.avatar}}</span> <a href="{% url 'profile' card.owner.handle %}"> {{card.owner.user.username}} </a> <br />
+                {%else%}
+                Owner: <span hx-get="{% url 'card_edit' card.id 'owner' %}" hx-target="this" hx-swap="outerHTML">+</span>
                 {% endif %}
+                <br/>
                 {% if card.helper %}
-                Owner: <a href="{% url 'profile' card.helper.handle %}"> {{card.helper.avatar}} {{card.helper.user.username}} </a> <br />
+                Helper: <span hx-get="{% url 'card_edit' card.id 'helper' %}" hx-target="this" hx-swap="outerHTML">{{card.helper.avatar}}</span> <a href="{% url 'profile' card.helper.handle %}">  {{card.helper.user.username}} </a> <br />
+                {%else%}
+                Helper: <span hx-get="{% url 'card_edit' card.id 'helper' %}" hx-target="this" hx-swap="outerHTML">+</span>
+                <!--Cange cha-->
                 {% endif %}
+                
                 {% if card.due_datetime %}
-                <span>📅🕕{{card.due_datetime}}</span>
+                <span hx-get="{% url 'card_edit' card.id 'due_datetime' %}" hx-target="this" hx-swap="outerHTML">📅🕕{{card.due_datetime}}</span>
                 {% endif %}
             </div>
             <br />
@@ -74,9 +82,13 @@
                 <h3>Attachments <button>+</button></h3>
                 <ul>
                     {% for attachment in card.attachments.all %}
-                    <li><a href="{{attachment.url}}">{{attachment.name}}</a></li>
+                    <li>
+                        <a href="{{attachment.url}}">{{attachment.name}}</a>
+                        <span hx-get="{% url 'card_edit' card.id 'attachment' %}" hx-target="this" hx-swap="outerHTML">🖋️</span>
+                    </li>
+                    
                     {% empty %}
-                    <p> No attachments added yet. </p>
+                    <p hx-get="{% url 'card_edit' card.id 'description' %}" hx-target="this" hx-swap="outerHTML"> No attachments added yet. </p>
                     {% endfor %}
                 </ul>
             </div>
@@ -86,9 +98,9 @@
                     Description
                 </h3>
                     {% if card.description %}
-                    <p>{{card.description}}</p>
+                    <p hx-get="{% url 'card_edit' card.id 'description' %}" hx-target="this" hx-swap="outerHTML">{{card.description}}</p>
                     {% else %}
-                    <textarea></textarea>
+                    <div class="muted" hx-get="{% url 'card_edit' card.id 'description' %}" hx-target="this" hx-swap="outerHTML">No description provided yet. Click and add one!</div>
                     {% endif %}
             </div>
         </div>

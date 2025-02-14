@@ -1,6 +1,7 @@
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
-from django.views.generic import TemplateView, DetailView
-from django.db.models import F
+from django.template.loader import render_to_string
+from django.views.generic import TemplateView, DetailView, View
 from django.db.models.functions import ExtractYear
 from .models import Board, Card, NibbleProfile
 
@@ -28,6 +29,15 @@ class CardView(DetailView):
     # TODO: rename to CardDetailView
     model = Card
     template_name = 'nibble/card.html'
+
+class CardEditView(View):
+    def get(self, request, card_id, field_name):
+        card = get_object_or_404(Card, id=card_id)
+        field_value = getattr(card, field_name)
+        response = render_to_string('nibble/forms/card_edit_form.html', {
+            "field_name":field_name, "field_value": field_value
+            })
+        return HttpResponse(response)
 
 class ProfileDetailView(DetailView):
     model = NibbleProfile

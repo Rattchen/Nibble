@@ -1,0 +1,8 @@
+<form hx-target="this" hx-swap="outerHTML" class="swappableClass">
+    {% if field_name == "due_datetime" %}
+    <input type="datetime-local" name="{{field_name}}" value="{{field_value}}" autofocus>
+    {% else %}
+      <input type="text" name="{{field_name}}" value="{{field_value}}" autofocus>
+      {% endif %}
+      <button class="btn">Cancel</button>
+</form>
