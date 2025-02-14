@@ -86,7 +86,7 @@ li.task-finished {
   </style>
 </head>
 
-<body>
+<body hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'>
    {% block "content" %}{% endblock %}
 </body>
 

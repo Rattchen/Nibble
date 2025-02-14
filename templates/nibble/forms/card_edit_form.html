@@ -1,8 +1,15 @@
-<form hx-target="this" hx-swap="outerHTML" class="swappableClass">
-    {% if field_name == "due_datetime" %}
+<form hx-post="{% url 'card_edit' card_id field_name %}" hx-target="this" hx-swap="outerHTML" class="swappableClass">
+  {% csrf_token %}
+  {% if field_name == "due_datetime" %}
     <input type="datetime-local" name="{{field_name}}" value="{{field_value}}" autofocus>
-    {% else %}
-      <input type="text" name="{{field_name}}" value="{{field_value}}" autofocus>
-      {% endif %}
-      <button class="btn">Cancel</button>
+  {% elif field_name == "owner" or field_name == "helper" %}
+    {% for user in user_list %}
+    <input type="radio" name="{{field_name}}" value="{{user.id}}">
+      {{user.handle}}
+    {%endfor%}
+  {%else%}
+    <input type="text" name="{{field_name}}" value="{{field_value}}" autofocus>
+  {% endif %}
+    <button type="submit">💾</button>
+    <button class="btn">Cancel</button>
 </form>

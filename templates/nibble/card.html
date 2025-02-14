@@ -43,6 +43,7 @@
         </div>
 
         <div id="protect-assigned" style="color:red;">
+            <!-- Change them to unique later in the CardDetailView -->
             {% for checklist in card.checklists.all%}
                 {% for task in checklist.tasks.all %}
                 {{task.assigned_to.avatar}}
@@ -51,8 +52,8 @@
         </div>
 
         <div id="project-title">
-            <h1 hx-get="{% url 'card_edit' card.id 'name' %}" hx-target="this" hx-swap="outerHTML">
-                {{card.name}}
+            <h1>
+                {% include "nibble/forms/card_field.html" with card_id=card.id field_name='name' field_value=card.name%}
             </h1>
         </div>
     </div>
@@ -61,16 +62,17 @@
         <div id="project-description">
             <div id="">
                 {% if card.owner %}
-                Owner: <span hx-get="{% url 'card_edit' card.id 'owner' %}" hx-target="this" hx-swap="outerHTML">{{card.owner.avatar}}</span> <a href="{% url 'profile' card.owner.handle %}"> {{card.owner.user.username}} </a> <br />
+             
+                Owner: {% include "nibble/forms/card_field.html" with card_id=card.id field_name='owner' field_value=card.owner.avatar%} <a href="{% url 'profile' card.owner.handle %}">  {{card.owner.user.username}} </a> <br />
                 {%else%}
                 Owner: <span hx-get="{% url 'card_edit' card.id 'owner' %}" hx-target="this" hx-swap="outerHTML">+</span>
                 {% endif %}
-                <br/>
+            
                 {% if card.helper %}
-                Helper: <span hx-get="{% url 'card_edit' card.id 'helper' %}" hx-target="this" hx-swap="outerHTML">{{card.helper.avatar}}</span> <a href="{% url 'profile' card.helper.handle %}">  {{card.helper.user.username}} </a> <br />
+                Helper: {% include "nibble/forms/card_field.html" with card_id=card.id field_name='helper' field_value=card.helper.avatar%} <a href="{% url 'profile' card.helper.handle %}">  {{card.helper.user.username}} </a> <br />
                 {%else%}
                 Helper: <span hx-get="{% url 'card_edit' card.id 'helper' %}" hx-target="this" hx-swap="outerHTML">+</span>
-                <!--Cange cha-->
+
                 {% endif %}
                 
                 {% if card.due_datetime %}
@@ -98,7 +100,9 @@
                     Description
                 </h3>
                     {% if card.description %}
-                    <p hx-get="{% url 'card_edit' card.id 'description' %}" hx-target="this" hx-swap="outerHTML">{{card.description}}</p>
+                    <p>
+                        {% include "nibble/forms/card_field.html" with card_id=card.id field_name='description' field_value=card.description%}
+                    </p>
                     {% else %}
                     <div class="muted" hx-get="{% url 'card_edit' card.id 'description' %}" hx-target="this" hx-swap="outerHTML">No description provided yet. Click and add one!</div>
                     {% endif %}

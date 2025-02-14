@@ -34,9 +34,34 @@ class CardEditView(View):
     def get(self, request, card_id, field_name):
         card = get_object_or_404(Card, id=card_id)
         field_value = getattr(card, field_name)
-        response = render_to_string('nibble/forms/card_edit_form.html', {
-            "field_name":field_name, "field_value": field_value
-            })
+
+        context = {
+            "card_id":card_id, "field_name":field_name, 
+            "field_value": field_value
+            }
+
+        if field_name == "owner" or field_name == "helper":
+            user_list = NibbleProfile.objects.all()
+            context["user_list"] = user_list
+
+        response = render_to_string('nibble/forms/card_edit_form.html', context)
+        return HttpResponse(response)
+    
+    def post(self, request, card_id, field_name):
+        card = get_object_or_404(Card, id=card_id)
+
+        if field_name == "owner" or field_name == "helper":
+            user = get_object_or_404(NibbleProfile, id=request.POST.get(field_name, "").strip())
+            setattr(card, field_name, user)   
+        else:
+            setattr(card, field_name, request.POST.get(field_name, "").strip())
+
+        card.save()
+        context = {
+            "card_id":card.id, "field_name":field_name,
+            "field_value": getattr(card, field_name)
+            }
+        response = render_to_string('nibble/forms/card_field.html', context)
         return HttpResponse(response)
 
 class ProfileDetailView(DetailView):
