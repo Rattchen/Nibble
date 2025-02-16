@@ -97,13 +97,20 @@ class TaskEditView(View):
             "task_id":task_id, "field_name":field_name, 
             "field_value": field_value
             }
-
+        if field_name == "assigned_to":
+            user_list = NibbleProfile.objects.all()
+            context["user_list"] = user_list
+            
         response = render_to_string('nibble/forms/task_edit_form.html', context)
         return HttpResponse(response)
 
     def post(self, request, task_id, field_name):
         task = get_object_or_404(Task, id=task_id)
-        setattr(task, field_name, request.POST.get(field_name, "").strip())
+        if field_name == "assigned_to":
+            user = get_object_or_404(NibbleProfile, id=request.POST.get(field_name, "").strip())
+            setattr(task, field_name, user)   
+        else:
+            setattr(task, field_name, request.POST.get(field_name, "").strip())
         task.save()
         context = {
             "task_id":task.id, "field_name":field_name,

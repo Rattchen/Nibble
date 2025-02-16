@@ -1,6 +1,15 @@
 <form hx-post="{% url 'task_edit' task_id field_name %}" hx-target="this" hx-swap="outerHTML" class="swappableClass">
-    {% csrf_token %}
-      <input type="text" name="{{field_name}}" value="{{field_value}}" autofocus>
-      <button type="submit">💾</button>
-      <button class="btn">Cancel</button>
-  </form>
+  {% csrf_token %}
+  {% if field_name == "due_datetime" %}
+    <input type="datetime-local" name="{{field_name}}" value="{{field_value}}" autofocus>
+  {% elif field_name == "assigned_to" %}
+    {% for user in user_list %}
+      <input type="radio" name="{{field_name}}" value="{{user.id}}">
+      {{user.handle}}
+    {% endfor %}
+  {% else %}
+    <input type="text" name="{{field_name}}" value="{{field_value}}" autofocus>
+  {% endif %}
+  <button type="submit">💾</button>
+  <button class="btn">Cancel</button>
+</form>
