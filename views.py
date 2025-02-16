@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.views.generic import TemplateView, DetailView, View
 from django.db.models.functions import ExtractYear
-from .models import Board, Card, NibbleProfile
+from .models import Board, Card, NibbleProfile, Checklist
 
 class IndexView(TemplateView):
     template_name = 'nibble/index.html'
@@ -62,6 +62,30 @@ class CardEditView(View):
             "field_value": getattr(card, field_name)
             }
         response = render_to_string('nibble/forms/card_field.html', context)
+        return HttpResponse(response)
+
+class ChecklistEditView(View):
+    def get(self, request, checklist_id, field_name):
+        checklist = get_object_or_404(Checklist, id=checklist_id)
+        field_value = getattr(checklist, field_name)
+
+        context = {
+            "checklist_id":checklist_id, "field_name":field_name, 
+            "field_value": field_value
+            }
+
+        response = render_to_string('nibble/forms/checklist_edit_form.html', context)
+        return HttpResponse(response)
+
+    def post(self, request, checklist_id, field_name):
+        checklist = get_object_or_404(Checklist, id=checklist_id)
+        setattr(checklist, field_name, request.POST.get(field_name, "").strip())
+        checklist.save()
+        context = {
+            "checklist_id":checklist.id, "field_name":field_name,
+            "field_value": getattr(checklist, field_name)
+            }
+        response = render_to_string('nibble/forms/checklist_field.html', context)
         return HttpResponse(response)
 
 class ProfileDetailView(DetailView):

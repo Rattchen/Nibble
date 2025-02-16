@@ -1,0 +1,6 @@
+<form hx-post="{% url 'checklist_edit' checklist_id field_name %}" hx-target="this" hx-swap="outerHTML" class="swappableClass">
+    {% csrf_token %}
+      <input type="text" name="{{field_name}}" value="{{field_value}}" autofocus>
+      <button type="submit">💾</button>
+      <button class="btn">Cancel</button>
+  </form>
