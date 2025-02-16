@@ -14,12 +14,14 @@
 
             <li class="list-group-item">
                 <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckboxStretched2">
-                <label class="form-check-label stretched-link" for="firstCheckboxStretched2" x-trigger="click"
+                <label class="form-check-label" for="firstCheckboxStretched2" x-trigger="click"
                     hx-swap="outerHTML">
                     {% if task.priority %}
                     <span>{{task.priority}}</span>
                     {% endif %}
-                    <span>{{task.name}}</span>
+                    <span>
+{% include "nibble/forms/task_field.html" with task=task task_id=task.id field_name='name' field_value=task.name %} 
+                    </span>
                     {% if task.due_datetime %}
                     <span>📅{{task.due_datetime}}🕕</span>
                     {% endif %}
