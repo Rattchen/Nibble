@@ -1,6 +1,8 @@
 from django.urls import path
 from .views import IndexView, BoardView,CardView, ProfileDetailView, CardEditView, ChecklistEditView, TaskEditView
 
+app_name = "nibble"
+
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
     path('board/', IndexView.as_view(), name='board_nothing'),
