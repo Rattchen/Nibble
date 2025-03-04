@@ -1,0 +1,31 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{column}}">
+    Add new
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal{{column}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add new</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            
+            <form hx-post="{% url 'nibble:card_create' %}" hx-target="#column{{column}}" hx-swap="beforeend" hx-on::after-request="this.reset(); bootstrap.Modal.getInstance(document.getElementById('exampleModal{{column}}')).hide()"
+                class="swappableClass">
+                <div class="modal-body">
+                    {% csrf_token %}
+
+                    <input type="text" name="name" autofocus>
+                    <input type="hidden" name="column" value="{{column}}">
+            
+                    <button type="submit" class="btn btn-primary">💾</button>
+          
+            </form>
+        </div>
+    </div>
+</div>
+</div>

@@ -46,7 +46,7 @@ class Card(models.Model):
     helper = models.ForeignKey(
         NibbleProfile, null=True, blank=True, on_delete=models.CASCADE, related_name="helper")
     # TODO: Change the owner and helper field names
-    label = models.ManyToManyField(Label)
+    label = models.ManyToManyField(Label, blank=True)
     due_datetime = models.DateTimeField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     column = models.ForeignKey(Column, on_delete=models.CASCADE, related_name="cards")

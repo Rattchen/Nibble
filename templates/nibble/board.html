@@ -4,14 +4,15 @@
 
 <div id="board-container">
     <h1 class="text">{{board.name}}</h1>
+    
     <div class="board-wrapper">
         {% for column in columns %}
-        <div class="column">
+        <div class="column" id="column{{column.id}}">
             <h3>{{column.name}}</h3>
+            {% include "nibble/forms/card_create_form.html" with column=column.id %}
             {% for card in column.card_list %}
             {% include "nibble/partials/card-small.html" with card=card %}
             {% endfor %}
-
         </div>
         {% endfor %}
     </div>

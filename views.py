@@ -1,9 +1,10 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.views.generic import TemplateView, DetailView, View
 from django.db.models.functions import ExtractYear
-from .models import Board, Card, NibbleProfile, Checklist, Task
+from .models import Board, Card, Column, NibbleProfile, Checklist, Task
+from .forms import CardForm
 
 class IndexView(TemplateView):
     template_name = 'nibble/index.html'
@@ -29,6 +30,23 @@ class CardView(DetailView):
     # TODO: rename to CardDetailView
     model = Card
     template_name = 'nibble/card.html'
+
+class CardCreateView(View):
+    def post(self, request):
+        form = CardForm(request.POST)
+        if form.is_valid():
+            card = form.save(commit=False)
+            card.column = get_object_or_404(Column, id=request.POST["column"])
+            card.save()
+            context = {"card":card}
+            response = render_to_string('nibble/partials/card-small.html', context)
+            return HttpResponse(response)
+        return JsonResponse({"success":False, "errors":form.errors}, status=400)
+        """
+        card = get_object_or_404(Card, id=1)
+        context = {'card':card}
+
+        """
 
 class CardEditView(View):
     def get(self, request, card_id, field_name):
