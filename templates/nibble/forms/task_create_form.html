@@ -15,11 +15,10 @@
         <div class="form-floating"> 
             <select class="form-select" id="selectTaskType" name="taskType">
                 <option selected>None</option>
-                <option value="1">🎨 Grafika</option>
-                <option value="2">✒️ Tekst</option>
-                <option value="3">😭 Organizacja</option>
-                <option value="4">📞 Kontakty</option>
-                <option value="5">Inne</option>
+                {% for type in task_types %}
+                <option value="{{type.id}}">{{type.icon}} {{type.name}}</option>
+                {% endfor %}
+                <option value="100">Inne</option>
             </select>
             <label for="selectTaskType">Type</label>
         </div>          

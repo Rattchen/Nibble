@@ -73,6 +73,7 @@ class Checklist(models.Model):
 
 class TaskType(models.Model):
     name = models.CharField(max_length=50)
+    icon = models.CharField(max_length=5, null=True, blank=True) # TODO: Change to ImageField
     # TODO: Add a linked specialization
 
     def __str__(self):
