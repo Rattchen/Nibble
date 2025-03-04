@@ -88,7 +88,7 @@ class Task(models.Model):
     due_datetime = models.DateTimeField(null=True, blank=True)
     points = models.IntegerField()
     assigned_to = models.ForeignKey(NibbleProfile, on_delete=models.CASCADE, null=True, blank=True, related_name="user_tasks")
-    is_finished = models.BooleanField()
+    is_finished = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

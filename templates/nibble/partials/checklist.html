@@ -12,9 +12,9 @@
 
             {% for task in checklist.tasks.all %}
 
-            <li class="list-group-item">
-                <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckboxStretched2">
-                <label class="form-check-label" for="firstCheckboxStretched2"
+            <li class="list-group-item" id="checklist{{checklist.id}}">
+                <input class="form-check-input me-1" type="checkbox" value="" id="Checkbox{{task.id}}For{{checklist.id}}">
+                <label class="form-check-label" for="Checkbox{{task.id}}For{{checklist.id}}"
                     hx-swap="outerHTML">
                     {% if task.priority %}
                     <span>
@@ -52,22 +52,32 @@
 
         <hr />
 
+
+    <form hx-post="{% url 'nibble:task_create' %}" hx-target="#collapseChecklist{{checklist.id}}" hx-swap="beforeend" hx-on::after-request="this.reset();" class="swappableClass">
+        {% csrf_token %}
         <div class="input-group mb-3">
-            <select class="form-select" id="selectTaskType" name="taskType">
-              <option selected>No type</option>
-              <option value="1">🎨 Grafika</option>
-              <option value="2">✒️ Tekst</option>
-              <option value="3">😭 Organizacja</option>
-              <option value="4">📞 Kontakty</option>
-              <option value="5">Inne</option>
-            </select>
-            <select class="form-select" id="selectPriority" name="priority">
-                <option selected>No priority</option>
-                <option value="1">🔴</option>
-                <option value="2">🟠</option>
-                <option value="3">🟡</option>
-                <option value="4">🟢</option>
-            </select>
+            <div class="form-floating"> 
+                <select class="form-select" id="selectPriority" name="priority">
+                    <option selected>None</option>
+                    <option value="1">🔴</option>
+                    <option value="2">🟠</option>
+                    <option value="3">🟡</option>
+                    <option value="4">🟢</option>
+                </select>
+                <label for="selectPriority">Priority</label>
+            </div>
+
+            <div class="form-floating"> 
+                <select class="form-select" id="selectTaskType" name="taskType">
+                    <option selected>None</option>
+                    <option value="1">🎨 Grafika</option>
+                    <option value="2">✒️ Tekst</option>
+                    <option value="3">😭 Organizacja</option>
+                    <option value="4">📞 Kontakty</option>
+                    <option value="5">Inne</option>
+                </select>
+                <label for="selectTaskType">Type</label>
+            </div>          
             <!--
                 https://getbootstrap.com/docs/5.3/forms/layout/
 
@@ -75,20 +85,36 @@
                 +
                 Make the Select buttons icons (like 👤 for assigned)
             -->
-            <input type="date" class="btn" />
+           
+           <!-- temporarily out due to type incompatibility
+            <div class="form-floating"> 
+                <input type="date" class="form-control" id="selectDueDate" name="due_datetime" placeholder="Due date"/>
+                <label for="selectDueDate">Due date</label>
+            </div>
+            -->
             <div class="form-floating">
-                <input type="text" class="form-control" id="taskName" placeholder="Task Name">
+                <input type="text" class="form-control" id="taskName" name="name" placeholder="Task Name" required>
                 <label for="taskName">Task name</label>
             </div>
-            <input type="number" name="" id="points" class="form-control" placeholder="Points">
-            <select class="form-select" id="inputGroupSelect03" aria-label="Example select with button addon">
-                <option selected>Assign</option>
-                <option value="1">👤 Person 1</option>
-                <option value="2">👤 Person 2</option>
-                <option value="3">👤 Person 3</option>
-                <option value="4">👤 Person 4</option>
-            </select>
+            <div class="form-floating">
+                <input type="number" name="points" id="taskPoints" class="form-control" placeholder="Points" required>
+                <label for="taskPoints">Points</label>
+            </div>
+            <!-- temporarily out due to type incompatibility
+            <div class="form-floating">
+                <select class="form-select" id="selectAssigned" name="assigned_to">
+                    <option selected>None</option>
+                    <option value="1">👤 Person 1</option>
+                    <option value="2">👤 Person 2</option>
+                    <option value="3">👤 Person 3</option>
+                    <option value="4">👤 Person 4</option>
+                </select>
+                <label for="selectAssigned">Assigned</label>
+            </div>
+        -->
+            <input type="hidden" name="checklist" value="{{checklist.id}}">
             <button type="submit" class="btn">💾</button>
           </div>
-    </div>
+    </form>
+</div>
 </div>

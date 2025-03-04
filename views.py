@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 from django.views.generic import TemplateView, DetailView, View
 from django.db.models.functions import ExtractYear
 from .models import Board, Card, Column, NibbleProfile, Checklist, Task
-from .forms import CardForm, ChecklistForm
+from .forms import CardForm, ChecklistForm, TaskForm
 
 class IndexView(TemplateView):
     template_name = 'nibble/index.html'
@@ -114,6 +114,18 @@ class ChecklistCreateView(View):
             context = {"checklist":checklist}
             response = render_to_string('nibble/partials/checklist.html', context)
             return HttpResponse(response)
+        return JsonResponse({"success":False, "errors":form.errors}, status=400)
+
+class TaskCreateView(View):
+    def post(self, request):
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            task = form.save()
+            context = {"task":task}
+            response = f"TASK {task.name} ADDED"
+            return HttpResponse(response)
+        else:
+            print(form.errors) # Temporary line while working on the View
         return JsonResponse({"success":False, "errors":form.errors}, status=400)
 
 class TaskEditView(View):
