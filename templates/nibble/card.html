@@ -110,13 +110,22 @@
         </div>
         <div id="project-lists-all">
             <h3>
-                Checklists <button>+</button>
+                Checklists
+                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAddChecklist" aria-expanded="false" aria-controls="collapseAddChecklist"> + </button>
             </h3>
+
+            </p>
+            <div class="collapse" id="collapseAddChecklist">
+                <form hx-post="{% url 'nibble:checklist_create' %}" hx-target="#project-lists-all" hx-swap="beforeend" hx-on::after-request="this.reset(); bootstrap.Collapse.getInstance(document.getElementById('collapseAddChecklist')).hide()" class="swappableClass">
+                    {% csrf_token %}
+                      <input type="text" name="name" autofocus required>
+                      <input type="hidden" name="card" value="{{card.id}}">
+                      <button type="submit">💾</button>
+                  </form>
+            </div>
 
             {% for checklist in card.checklists.all %}
                 {% include "nibble/partials/checklist.html" with checklist=checklist %}
-                {% empty %}
-                    <h5> There's no tasklist yet :&lt; Create one! </h5>
             {% endfor %}
 
         </div>

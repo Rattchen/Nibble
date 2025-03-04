@@ -1,12 +1,12 @@
 <div>
     {% include "nibble/forms/checklist_field.html" with checklist=checklist checklist_id=checklist.id field_name='name' field_value=checklist.name %} 
     <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
-        data-bs-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2">
+        data-bs-target="#collapseChecklist{{checklist.id}}" aria-expanded="false" aria-controls="collapseChecklist{{checklist.id}}">
         v
     </button>
 </div>
 
-<div class="collapse show" id="collapseExample2">
+<div class="collapse show" id="collapseChecklist{{checklist.id}}">
     <div class="card card-body">
         <ul class="list-group">
 
