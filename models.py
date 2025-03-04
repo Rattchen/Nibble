@@ -80,16 +80,29 @@ class TaskType(models.Model):
         return self.name
 
 class Task(models.Model):
+    class Priority(models.TextChoices):
+        HIGH = "H", "High"
+        NORMAL = "N", "Normal"
+        LOW = "L", "Low"
+
+    PRIORITY_DETAILS = {
+        Priority.HIGH: {"color":"#c70404", "icon":"🔴", "associated_character":"꜒"},
+        Priority.NORMAL: {"color":"#c7c004", "icon":"🟡", "associated_character":"꜔"},
+        Priority.LOW: {"color":"#14c704", "icon":"🟢", "associated_character":"꜖"},
+    }
+
     name = models.CharField(max_length=100)
     order_index = models.IntegerField(null=True, blank=True)
     checklist = models.ForeignKey(Checklist, on_delete=models.CASCADE, related_name="tasks")
     task_type = models.ForeignKey(TaskType, null=True, blank=True, on_delete=models.CASCADE)
-    priority = models.CharField(max_length=50, null=True, blank=True)
-    # TODO: Create a subclass Priority
+    priority = models.CharField(max_length=1, choices=Priority.choices, null=True, blank=True)
     due_datetime = models.DateTimeField(null=True, blank=True)
     points = models.IntegerField()
     assigned_to = models.ForeignKey(NibbleProfile, on_delete=models.CASCADE, null=True, blank=True, related_name="user_tasks")
     is_finished = models.BooleanField(default=False)
+
+    def get_priority_info(self):
+        return self.PRIORITY_DETAILS.get(self.priority, {})
 
     def __str__(self):
         return self.name
