@@ -53,35 +53,42 @@
         <hr />
 
         <div class="input-group mb-3">
-            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                aria-expanded="false">Type</button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">🎨 Grafika</a></li>
-                <li><a class="dropdown-item" href="#">✒️ Tekst</a></li>
-                <li><a class="dropdown-item" href="#">😭 Organizacja</a></li>
-                <li><a class="dropdown-item" href="#">📞Kontakt</a></li>
-                <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="#">Custom</a></li>
-            </ul>
+            <select class="form-select" id="selectTaskType" name="taskType">
+              <option selected>No type</option>
+              <option value="1">🎨 Grafika</option>
+              <option value="2">✒️ Tekst</option>
+              <option value="3">😭 Organizacja</option>
+              <option value="4">📞 Kontakty</option>
+              <option value="5">Inne</option>
+            </select>
+            <select class="form-select" id="selectPriority" name="priority">
+                <option selected>No priority</option>
+                <option value="1">🔴</option>
+                <option value="2">🟠</option>
+                <option value="3">🟡</option>
+                <option value="4">🟢</option>
+            </select>
+            <!--
+                https://getbootstrap.com/docs/5.3/forms/layout/
 
-            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                aria-expanded="false">Priority</button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">🔴 Urgent</a></li>
-                <li><a class="dropdown-item" href="#">🟠 Important</a></li>
-                <li><a class="dropdown-item" href="#">🟡 </a></li>
-                <li><a class="dropdown-item" href="#">🟢 </a></li>
-            </ul>
-
-            <input type="date" placeholder="Date" class="btn" text="...m" />
-
-            <!-- Make the button smaller -->
-
-
-            <!-- TODO: Custom otwiera modal w którym się podaje wartość. Albo otwiera kolejny collapse, ale modal lepiej wyglądać będzie -->
-
-            <input type="text" class="form-control" aria-label="Text input with dropdown button">
-        </div>
+                Layout the form
+                +
+                Make the Select buttons icons (like 👤 for assigned)
+            -->
+            <input type="date" class="btn" />
+            <div class="form-floating">
+                <input type="text" class="form-control" id="taskName" placeholder="Task Name">
+                <label for="taskName">Task name</label>
+            </div>
+            <input type="number" name="" id="points" class="form-control" placeholder="Points">
+            <select class="form-select" id="inputGroupSelect03" aria-label="Example select with button addon">
+                <option selected>Assign</option>
+                <option value="1">👤 Person 1</option>
+                <option value="2">👤 Person 2</option>
+                <option value="3">👤 Person 3</option>
+                <option value="4">👤 Person 4</option>
+            </select>
+            <button type="submit" class="btn">💾</button>
+          </div>
     </div>
 </div>
