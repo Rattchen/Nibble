@@ -117,6 +117,12 @@ class ChecklistCreateView(View):
         return JsonResponse({"success":False, "errors":form.errors}, status=400)
 
 class TaskCreateView(View):
+    def get(self, request):
+        checklist_id = request.GET['checklist_id']
+        context = {'checklist_id':checklist_id}
+        response = render_to_string('nibble/forms/task_create_form.html', context)
+        return HttpResponse(response)
+
     def post(self, request):
         form = TaskForm(request.POST)
         if form.is_valid():
