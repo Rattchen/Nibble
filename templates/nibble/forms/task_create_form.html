@@ -1,9 +1,14 @@
 <form hx-post="{% url 'nibble:task_create' %}" hx-target="#collapseChecklist{{checklist_id}}" hx-swap="beforeend" hx-on::after-request="this.reset();" class="swappableClass">
     {% csrf_token %}
     <div class="input-group mb-3">
+        <p>aaa</p>
+        {% for priority in priorities %}
+        {{priority}}
+        {% endfor %}
+        <p>aaa</p>
         <div class="form-floating"> 
             <select class="form-select" id="selectPriority" name="priority">
-                <option selected>None</option>
+                <option selected value="">Nope</option>
                 <option value="1">🔴</option>
                 <option value="2">🟠</option>
                 <option value="3">🟡</option>
@@ -13,12 +18,12 @@
         </div>
 
         <div class="form-floating"> 
-            <select class="form-select" id="selectTaskType" name="taskType">
-                <option selected>None</option>
+            <select class="form-select" id="selectTaskType" name="task_type">
+                <option selected value="">None</option>
                 {% for type in task_types %}
                 <option value="{{type.id}}">{{type.icon}} {{type.name}}</option>
                 {% endfor %}
-                <option value="100">Inne</option>
+                <option value="" disabled>❓ Inne</option>
             </select>
             <label for="selectTaskType">Type</label>
         </div>          
@@ -44,18 +49,17 @@
             <input type="number" name="points" id="taskPoints" class="form-control" placeholder="Points" required>
             <label for="taskPoints">Points</label>
         </div>
-        <!-- temporarily out due to type incompatibility
+
         <div class="form-floating">
             <select class="form-select" id="selectAssigned" name="assigned_to">
-                <option selected>None</option>
-                <option value="1">👤 Person 1</option>
-                <option value="2">👤 Person 2</option>
-                <option value="3">👤 Person 3</option>
-                <option value="4">👤 Person 4</option>
+                <option selected value="">None</option>
+                {% for profile in user_list %}
+                <option value="user.id">{{profile.avatar}} {{profile.user.username}}</option>
+                {% endfor %}
             </select>
             <label for="selectAssigned">Assigned</label>
         </div>
-    -->
+    
         <input type="hidden" name="checklist" value="{{checklist_id}}">
         <button type="submit" class="btn">💾</button>
       </div>
