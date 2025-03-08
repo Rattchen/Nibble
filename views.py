@@ -131,8 +131,8 @@ class TaskCreateView(View):
         form = TaskForm(request.POST)
         if form.is_valid():
             task = form.save()
-            context = {"task":task}
-            response = f"TASK {task.name} ADDED"
+            context = {"task":task, 'checklist':task.checklist}
+            response = render_to_string('nibble/partials/task.html', context)
             return HttpResponse(response)
         else:
             print(form.errors) # Temporary line while working on the View

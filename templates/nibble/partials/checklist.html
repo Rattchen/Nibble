@@ -8,12 +8,12 @@
 
 <div class="collapse show" id="collapseChecklist{{checklist.id}}">
     <div class="card card-body">
-        <ul class="list-group">
+        <ul class="list-group" id="checklist{{checklist.id}}">
 
             {% for task in checklist.tasks.all %}
 
-            <li class="list-group-item" id="checklist{{checklist.id}}">
-                <input class="form-check-input me-1" type="checkbox" value="" id="Checkbox{{task.id}}For{{checklist.id}}">
+            <li class="list-group-item {% if task.is_finished %} task-finished {% endif %}" id="checklist{{checklist.id}}" >
+                <input class="form-check-input me-1" type="checkbox" id="Checkbox{{task.id}}For{{checklist.id}}" {% if task.is_finished %} checked {% endif %}>
                 <label class="form-check-label" for="Checkbox{{task.id}}For{{checklist.id}}"
                     hx-swap="outerHTML">
                     {% if task.priority %}
@@ -42,7 +42,8 @@
                     {% endif %}
 
                     {% empty %}
-                    Add a task and start planning your big heist!
+                    <ul class="list-group" id="checklist{{checklist.id}}"> 
+                    </ul>
                 {% endfor %}
                 </label>
             </li>

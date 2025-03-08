@@ -1,4 +1,4 @@
-<form hx-post="{% url 'nibble:task_create' %}" hx-target="#collapseChecklist{{checklist_id}}" hx-swap="beforeend" hx-on::after-request="this.reset();" class="swappableClass">
+<form hx-post="{% url 'nibble:task_create' %}" hx-target="#checklist{{checklist_id}}" hx-swap="beforeend" hx-on::after-request="this.reset();" class="swappableClass">
     {% csrf_token %}
     <div class="input-group mb-3">
         <div class="form-floating"> 
@@ -29,12 +29,17 @@
             Make the Select buttons icons (like 👤 for assigned)
         -->
        
-       <!-- temporarily out due to type incompatibility
+ 
         <div class="form-floating"> 
-            <input type="date" class="form-control" id="selectDueDate" name="due_datetime" placeholder="Due date"/>
+            <input type="date" class="form-control" id="selectDueDate" name="due_date" placeholder="Due date"/>
             <label for="selectDueDate">Due date</label>
         </div>
-        -->
+
+        <div class="form-floating"> 
+            <input type="time" class="form-control" id="selectDueTime" name="due_time" placeholder="Due time"/>
+            <label for="selectDueDate">Due time</label>
+        </div>
+   
         <div class="form-floating">
             <input type="text" class="form-control" id="taskName" name="name" placeholder="Task Name" required>
             <label for="taskName">Task name</label>
