@@ -86,9 +86,9 @@ class Task(models.Model):
         LOW = "L", "Low"
 
     PRIORITY_DETAILS = {
-        Priority.HIGH: {"color":"#c70404", "icon":"🔴", "associated_character":"꜒"},
-        Priority.NORMAL: {"color":"#c7c004", "icon":"🟡", "associated_character":"꜔"},
-        Priority.LOW: {"color":"#14c704", "icon":"🟢", "associated_character":"꜖"},
+        Priority.HIGH: {"color":"#c70404", "icon":"🔴", "associated_character":"꜒", "label": Priority.HIGH.label, "value": Priority.HIGH.value},
+        Priority.NORMAL: {"color":"#c7c004", "icon":"🟡", "associated_character":"꜔", "label": Priority.NORMAL.label, "value": Priority.HIGH.value},
+        Priority.LOW: {"color":"#14c704", "icon":"🟢", "associated_character":"꜖", "label": Priority.LOW.label, "value": Priority.HIGH.value},
     }
 
     name = models.CharField(max_length=100)

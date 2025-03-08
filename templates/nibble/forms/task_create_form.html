@@ -1,18 +1,12 @@
 <form hx-post="{% url 'nibble:task_create' %}" hx-target="#collapseChecklist{{checklist_id}}" hx-swap="beforeend" hx-on::after-request="this.reset();" class="swappableClass">
     {% csrf_token %}
     <div class="input-group mb-3">
-        <p>aaa</p>
-        {% for priority in priorities %}
-        {{priority}}
-        {% endfor %}
-        <p>aaa</p>
         <div class="form-floating"> 
             <select class="form-select" id="selectPriority" name="priority">
-                <option selected value="">Nope</option>
-                <option value="1">🔴</option>
-                <option value="2">🟠</option>
-                <option value="3">🟡</option>
-                <option value="4">🟢</option>
+                <option selected value="">None</option>
+                {% for key, detail in priorities.items %}
+                <option value="{{key}}">{{detail.icon}} {{detail.label}}</option>
+                {% endfor %}
             </select>
             <label for="selectPriority">Priority</label>
         </div>
@@ -54,7 +48,7 @@
             <select class="form-select" id="selectAssigned" name="assigned_to">
                 <option selected value="">None</option>
                 {% for profile in user_list %}
-                <option value="user.id">{{profile.avatar}} {{profile.user.username}}</option>
+                <option value="{{profile.id}}">{{profile.avatar}} {{profile.user.username}}</option>
                 {% endfor %}
             </select>
             <label for="selectAssigned">Assigned</label>

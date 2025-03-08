@@ -122,8 +122,7 @@ class TaskCreateView(View):
 
         task_types = TaskType.objects.all()
         user_list = NibbleProfile.objects.all()
-        priority_choices = Task.Priority.choices
-        print(f"aaa {priority_choices} aaa")
+        priority_choices = Task.PRIORITY_DETAILS
         context = {'checklist_id':checklist_id, 'task_types':task_types, 'user_list':user_list, 'priorities':priority_choices}
         response = render_to_string('nibble/forms/task_create_form.html', context)
         return HttpResponse(response)
