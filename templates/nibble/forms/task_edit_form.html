@@ -1,12 +1,34 @@
 <form hx-post="{% url 'nibble:task_edit' task_id field_name %}" hx-target="#li{{task_id}}for{{checklist_id}}" hx-swap="outerHTML" class="swappableClass">
   {% csrf_token %}
-  {% if field_name == "due_datetime" %}
-    <input type="datetime-local" name="{{field_name}}" value="{{field_value}}" autofocus>
+  {% if field_name == "due_date" %}
+    <input type="date" name="{{field_name}}" value="{{field_value}}">
+  {% elif field_name == "due_time" %}
+    <input type="time" name="{{field_name}}" value="{{field_value}}">
   {% elif field_name == "assigned_to" %}
-    {% for user in user_list %}
-      <input type="radio" name="{{field_name}}" value="{{user.id}}">
-      {{user.handle}}
+  <select class="form-select" id="selectAssigned" name="assigned_to">
+    <option selected value="">None</option>
+    {% for profile in user_list %}
+    <option value="{{profile.id}}">{{profile.avatar}} {{profile.user.username}}</option>
     {% endfor %}
+</select>
+
+    {% elif field_name == "priority" %}
+    <select class="form-select" id="selectPriority" name="priority">
+      <option selected value="">None</option>
+      {% for key, detail in priorities.items %}
+      <option value="{{key}}">{{detail.icon}} {{detail.label}}</option>
+      {% endfor %}
+  </select>
+
+  {% elif field_name == "task_type" %}
+  <select class="form-select" id="selectTaskType" name="task_type">
+    <option selected value="">None</option>
+    {% for type in task_types %}
+    <option value="{{type.id}}">{{type.icon}} {{type.name}}</option>
+    {% endfor %}
+    <option value="" disabled>❓ Inne</option>
+</select>
+
   {% else %}
     <input type="text" name="{{field_name}}" value="{{field_value}}" autofocus>
   {% endif %}

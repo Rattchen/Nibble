@@ -151,6 +151,12 @@ class TaskEditView(View):
         if field_name == "assigned_to":
             user_list = NibbleProfile.objects.all()
             context["user_list"] = user_list
+        elif field_name == "priority":
+            priority_choices = Task.PRIORITY_DETAILS
+            context["priorities"] = priority_choices
+        elif field_name == "task_type":
+            task_types = TaskType.objects.all()
+            context["task_types"] = task_types
 
         response = render_to_string('nibble/forms/task_edit_form.html', context)
         return HttpResponse(response)
