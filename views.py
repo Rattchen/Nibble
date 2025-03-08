@@ -187,7 +187,7 @@ class ProfileDetailView(DetailView):
         profile = self.get_object()
         #context["assigned_tasks"] = profile.user_tasks.all()
         years = (profile.user_tasks
-        .annotate(year=ExtractYear("due_datetime"))
+        .annotate(year=ExtractYear("due_date"))
         .values("year")
         .distinct()
         .order_by("-year"))
@@ -196,7 +196,7 @@ class ProfileDetailView(DetailView):
 
         for year in years:
             year_value = year['year']
-            tasks_by_year[year_value] = profile.user_tasks.filter(due_datetime__year=year_value)
+            tasks_by_year[year_value] = profile.user_tasks.filter(due_date__year=year_value)
 
         context["tasks_by_year"] = tasks_by_year
         return context
