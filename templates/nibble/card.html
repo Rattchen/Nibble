@@ -73,12 +73,12 @@
                 {% if card.helper %}
                 Helper: {% include "nibble/forms/card_field.html" with card_id=card.id field_name='helper' field_value=card.helper.avatar%} <a href="{% url 'nibble:profile' card.helper.handle %}">  {{card.helper.user.username}} </a> <br />
                 {%else%}
-                Helper: <span hx-get="{% url 'nibble:card_edit' card.id 'helper' %}" hx-target="this" hx-swap="outerHTML">+</span>
+                Helper: <span hx-get="{% url 'nibble:card_edit' card.id 'helper' %}" hx-target="this" hx-swap="outerHTML" class="field-editable">+</span>
 
                 {% endif %}
                 
                 {% if card.due_datetime %}
-                <span hx-get="{% url 'nibble:card_edit' card.id 'due_datetime' %}" hx-target="this" hx-swap="outerHTML">📅🕕{{card.due_datetime}}</span>
+                <span hx-get="{% url 'nibble:card_edit' card.id 'due_datetime' %}" hx-target="this" hx-swap="outerHTML" class="field-editable">📅🕕{{card.due_datetime}}</span>
                 {% endif %}
             </div>
             <br />

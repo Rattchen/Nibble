@@ -4,41 +4,41 @@
     <label class="form-check-label">
         
         {% if task.priority %}
-        <span hx-get="{% url 'nibble:task_edit' task.id 'priority' %}" hx-target="this" hx-swap="outerHTML">
+        <span hx-get="{% url 'nibble:task_edit' task.id 'priority' %}" hx-target="this" hx-swap="outerHTML" class="field-editable">
             {{task.priority}}
         </span>
         {% endif %}
 
-        <span hx-get="{% url 'nibble:task_edit' task.id 'name' %}" hx-target="this" hx-swap="outerHTML">
+        <span hx-get="{% url 'nibble:task_edit' task.id 'name' %}" hx-target="this" hx-swap="outerHTML" class="field-editable">
             {{task.name}}
         </span>
 
         {% if task.due_date %}
-        <span hx-get="{% url 'nibble:task_edit' task.id 'due_date' %}" hx-target="this" hx-swap="outerHTML">
+        <span hx-get="{% url 'nibble:task_edit' task.id 'due_date' %}" hx-target="this" hx-swap="outerHTML" class="field-editable">
             📅 {{task.due_date}}
         </span>
         {% endif %}
 
         {% if task.due_time %}
-        <span hx-get="{% url 'nibble:task_edit' task.id 'due_time' %}" hx-target="this" hx-swap="outerHTML">
+        <span hx-get="{% url 'nibble:task_edit' task.id 'due_time' %}" hx-target="this" hx-swap="outerHTML" class="field-editable">
             🕕 {{task.due_time}}
         </span>
         {% endif %}
 
 
         <span hx-get="{% url 'nibble:task_edit' task.id 'points' %}" hx-target="this" hx-swap="outerHTML"
-            class="badge text-bg-primary rounded-pill">
+            class="badge text-bg-primary rounded-pill field-editable">
             {{task.points}} pts
         </span>
 
 
         {% if task.assigned_to %}
         <span hx-get="{% url 'nibble:task_edit' task.id 'assigned_to' %}" hx-target="this" hx-swap="outerHTML"
-            class="task-assigned">
+            class="task-assigned field-editable">
             {{task.assigned_to}}
         </span>
         {% else %}
-        <span hx-get="{% url 'nibble:task_edit' task.id 'task_type' %}" hx-target="this" hx-swap="outerHTML">
+        <span hx-get="{% url 'nibble:task_edit' task.id 'task_type' %}" hx-target="this" hx-swap="outerHTML" class="field-editable">
             {{task.task_type}}
         </span>
         {% endif %}
