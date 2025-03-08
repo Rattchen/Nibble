@@ -1,7 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
-from django.views.generic import TemplateView, DetailView, View, DeleteView
+from django.views.generic import TemplateView, DetailView, View
 from django.db.models.functions import ExtractYear
 from .models import Board, Card, Column, NibbleProfile, Checklist, Task, TaskType
 from .forms import CardForm, ChecklistForm, TaskForm
