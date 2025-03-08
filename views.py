@@ -1,7 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
-from django.views.generic import TemplateView, DetailView, View
+from django.views.generic import TemplateView, DetailView, View, DeleteView
 from django.db.models.functions import ExtractYear
 from .models import Board, Card, Column, NibbleProfile, Checklist, Task, TaskType
 from .forms import CardForm, ChecklistForm, TaskForm
@@ -178,6 +178,18 @@ class TaskEditView(View):
         context = {'task':task, 'checklist': task.checklist}     
         response = render_to_string('nibble/partials/task.html', context)
         return HttpResponse(response)
+
+class TaskDeleteView(View):
+    def get(self, request, *args, **kwargs):
+        task = get_object_or_404(Task, pk=self.kwargs['pk'])
+        context={'task':task, 'checklist':task.checklist}
+        response = render_to_string('nibble/forms/delete_confirmation_modal.html', context)
+        return HttpResponse(response)
+
+    def delete(self, request, *args, **kwargs):
+        task = get_object_or_404(Task, pk=self.kwargs['pk'])
+        task.delete()
+        return HttpResponse(status=200)
 
 
 class ProfileDetailView(DetailView):

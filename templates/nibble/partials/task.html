@@ -43,4 +43,5 @@
         </span>
         {% endif %}
     </label>
+    <button hx-get="{% url 'nibble:task_delete' task.id %}" hx-target="#deleteModal" hx-swap="outerHTML" hx-on::after-request="setTimeout(() => bootstrap.Modal.getOrCreateInstance(document.getElementById('deleteModal')).show(), 100)">🗑️</button>
 </li>
