@@ -14,4 +14,4 @@ class ChecklistForm(ModelForm):
 class TaskForm(ModelForm):
     class Meta:
         model = Task
-        fields = ['name', 'checklist', 'task_type', 'priority', 'due_datetime', 'points', 'assigned_to']
+        fields = ['name', 'checklist', 'task_type', 'priority', 'due_date', 'due_time', 'points', 'assigned_to']
