@@ -145,12 +145,13 @@ class TaskEditView(View):
 
         context = {
             "task_id":task_id, "field_name":field_name, 
-            "field_value": field_value
+            "field_value": field_value, 'checklist_id': task.checklist.id
             }
+
         if field_name == "assigned_to":
             user_list = NibbleProfile.objects.all()
             context["user_list"] = user_list
-            
+
         response = render_to_string('nibble/forms/task_edit_form.html', context)
         return HttpResponse(response)
 
@@ -158,15 +159,18 @@ class TaskEditView(View):
         task = get_object_or_404(Task, id=task_id)
         if field_name == "assigned_to":
             user = get_object_or_404(NibbleProfile, id=request.POST.get(field_name, "").strip())
-            setattr(task, field_name, user)   
+            setattr(task, field_name, user)
+        elif field_name == "is_finished":
+            if request.POST:
+                task.is_finished = True
+            else:
+                task.is_finished = False
         else:
             setattr(task, field_name, request.POST.get(field_name, "").strip())
         task.save()
-        context = {
-            "task_id":task.id, "field_name":field_name,
-            "field_value": getattr(task, field_name)
-            }
-        response = render_to_string('nibble/forms/task_field.html', context)
+
+        context = {'task':task, 'checklist': task.checklist}     
+        response = render_to_string('nibble/partials/task.html', context)
         return HttpResponse(response)
 
 

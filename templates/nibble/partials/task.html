@@ -1,7 +1,8 @@
-<li class="list-group-item">
-    <input class="form-check-input me-1" type="checkbox" 
+<li class="list-group-item {% if task.is_finished %} task-finished {% endif %}" id="li{{task.id}}for{{checklist.id}}">
+    <input hx-post="{% url 'nibble:task_edit' task.id 'is_finished' %}" hx-target="#li{{task.id}}for{{checklist.id}}" hx-swap="outerHTML" name="is_finished" class="form-check-input me-1" type="checkbox"
     id="Checkbox{{task.id}}For{{checklist.id}}" {% if task.is_finished %} checked {% endif %}>
-    <label class="form-check-label" for="Checkbox{{task.id}}For{{checklist.id}}" hx-swap="outerHTML">
+    <label class="form-check-label">
+        
         {% if task.priority %}
         <span hx-get="{% url 'nibble:task_edit' task.id 'priority' %}" hx-target="this" hx-swap="outerHTML">
             {{task.priority}}

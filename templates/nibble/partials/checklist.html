@@ -9,47 +9,10 @@
 <div class="collapse show" id="collapseChecklist{{checklist.id}}">
     <div class="card card-body">
         <ul class="list-group" id="checklist{{checklist.id}}">
-
             {% for task in checklist.tasks.all %}
-
-            <li class="list-group-item {% if task.is_finished %} task-finished {% endif %}" id="checklist{{checklist.id}}" >
-                <input class="form-check-input me-1" type="checkbox" id="Checkbox{{task.id}}For{{checklist.id}}" {% if task.is_finished %} checked {% endif %}>
-                <label class="form-check-label" for="Checkbox{{task.id}}For{{checklist.id}}"
-                    hx-swap="outerHTML">
-                    {% if task.priority %}
-                    <span>
-{% include "nibble/forms/task_field.html" with task=task task_id=task.id field_name='priority' field_value=task.priority %} 
-                    </span>
-                    {% endif %}
-                    <span>
-{% include "nibble/forms/task_field.html" with task=task task_id=task.id field_name='name' field_value=task.name %} 
-                    </span>
-                    {% if task.due_datetime %}
-                    <span>📅
-{% include "nibble/forms/task_field.html" with task=task task_id=task.id field_name='due_datetime' field_value=task.due_datetime %}
-                        🕕</span>
-                    {% endif %}
-                    <span class="badge text-bg-primary rounded-pill">
-{% include "nibble/forms/task_field.html" with task=task task_id=task.id field_name='points' field_value=task.points %}                         pts</span>
-                    {% if task.assigned_to %}
-                    <span class="task-assigned">
-{% include "nibble/forms/task_field.html" with task=task task_id=task.id field_name='assigned_to' field_value=task.assigned_to %}
-                    </span>
-                    {% else %}
-                    <span>
-{% include "nibble/forms/task_field.html" with task=task task_id=task.id field_name='task_type' field_value=task.task_type %} 
-</span> 
-                    {% endif %}
-
-                    {% empty %}
-                    <ul class="list-group" id="checklist{{checklist.id}}"> 
-                    </ul>
-                {% endfor %}
-                </label>
-            </li>
+            {% include "nibble/partials/task.html" with task=task checklist=checklist %} 
+            {% endfor %}
         </ul>
-
-        <!-- Input to add a new task -->
 
         <hr />
         <div class="add-task">
