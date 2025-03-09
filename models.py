@@ -102,6 +102,52 @@ class Task(models.Model):
     assigned_to = models.ForeignKey(NibbleProfile, on_delete=models.CASCADE, null=True, blank=True, related_name="user_tasks")
     is_finished = models.BooleanField(default=False)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.cached_assigned_to = self.assigned_to
+        self.cached_is_finished = self.is_finished
+
+    def save(self, *args, **kwargs):
+        changed_assignee = False
+        changed_status = False
+
+        if self.pk: #If editing an already existing task
+            if self.cached_assigned_to != self.assigned_to:
+                changed_assignee = True
+            if self.cached_is_finished != self.is_finished:
+                changed_status = True
+        else: #If a new task
+            if self.assigned_to and self.is_finished:
+                print(f"My assignee has {self.assigned_to.points} pts")
+                self.assigned_to.points = models.F("points") + self.points
+                self.assigned_to.save()
+
+        if changed_assignee:
+            print(F"New assignee is {self.assigned_to}, old assignee was {self.cached_assigned_to}")
+            # Deduct points from the old assignee
+            self.cached_assigned_to.points = models.F("points") - self.points
+            self.cached_assigned_to.save()
+            # Give points to the new assignee
+            self.assigned_to.points = models.F("points") + self.points
+            self.assigned_to.save()
+        if changed_status:
+            if self.is_finished and self.assigned_to:
+                self.assigned_to.points = models.F("points") + self.points
+                self.assigned_to.save()
+            elif not self.is_finished and self.assigned_to:
+                self.assigned_to.points = models.F("points") - self.points
+                self.assigned_to.save()
+
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        print(f"Attempting to delete an item {self.name}")
+        if self.is_finished and self.assigned_to:
+            self.assigned_to.points = models.F("points") - self.points
+            self.assigned_to.save()
+        super().delete(*args, **kwargs)
+        #For future me: remember that even after super().delete() you can access values with no need for caching in init
+       
     def get_priority_info(self):
         return self.PRIORITY_DETAILS.get(self.priority, {})
 
