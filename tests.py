@@ -23,6 +23,9 @@ class TaskProfilePointsTest(TestCase):
         self.task_finished_assigned_p1 = Task.objects.create(name="Finished unassigned test task", checklist=self.checklist, points=3, assigned_to=self.profile1, is_finished=True)
         self.task_unfinished_assigned_p2 = Task.objects.create(name="NOT finished unassigned test task", checklist=self.checklist, points=7, assigned_to=self.profile2, is_finished=False)
 
+        self.profile1.refresh_from_db()
+        self.profile2.refresh_from_db()
+
     def test_task_creation(self):
         """Tests what happens when the unfinished task is created with an assignee; it shouldn't reward points."""
 
@@ -37,15 +40,17 @@ class TaskProfilePointsTest(TestCase):
         old_user_points = self.profile1.points
         old_task_points = self.task_finished_assigned_p1.points
         self.task_finished_assigned_p1.delete()
+        self.profile1.refresh_from_db()
         new_points_count = old_user_points - old_task_points
 
         self.assertEqual(self.profile1.points, new_points_count)
 
     def test_task_completion(self):
         """Tests if the points are correctly given to the assignee."""
-        
+
         old_user_points = self.profile2.points
         self.task_unfinished_assigned_p2.is_finished = True
+        self.task_unfinished_assigned_p2.save()
         new_points_count = old_user_points + self.task_unfinished_assigned_p2.points
 
         self.assertEqual(self.profile2.points, new_points_count)
@@ -55,6 +60,8 @@ class TaskProfilePointsTest(TestCase):
         
         old_user_points = self.profile1.points
         self.task_finished_assigned_p1.is_finished = False
+        self.task_finished_assigned_p1.save()
+        self.profile1.refresh_from_db()
         new_points_count = old_user_points - self.task_finished_assigned_p1.points
 
         self.assertEqual(self.profile1.points, new_points_count)
@@ -64,6 +71,7 @@ class TaskProfilePointsTest(TestCase):
         
         old_user_points = self.profile1.points
         self.task_finished_unassigned.assigned_to = self.profile1
+        self.task_finished_unassigned.save()
         new_points_count = old_user_points + self.task_finished_unassigned.points
 
         self.assertEqual(self.profile1.points, new_points_count)
@@ -73,8 +81,10 @@ class TaskProfilePointsTest(TestCase):
         
         old_user_points = self.profile1.points
         self.task_finished_assigned_p1.assigned_to = None
+        self.task_finished_assigned_p1.save()
+        self.task_finished_assigned_p1.refresh_from_db()
         new_points_count = old_user_points - self.task_finished_assigned_p1.points
-
+    
         self.assertEqual(self.profile1.points, new_points_count)
 
     def test_task_reassignment(self):
@@ -83,7 +93,8 @@ class TaskProfilePointsTest(TestCase):
         old_user1_points = self.profile1.points
         old_user2_points = self.profile2.points
 
-        self.task_finished_assigned_p1.asigned_to = self.profile2
+        self.task_finished_assigned_p1.assigned_to = self.profile2
+        self.task_finished_assigned_p1.save()
 
         new_user1_points_count = old_user1_points - self.task_finished_assigned_p1.points
         new_user2_points_count = old_user2_points + self.task_finished_assigned_p1.points
@@ -97,11 +108,17 @@ class TaskProfilePointsTest(TestCase):
         old_user_points = self.profile1.points
 
         self.task_finished_assigned_p1.is_finished = False 
+        self.task_finished_assigned_p1.save()
         self.task_finished_assigned_p1.is_finished = True
+        self.task_finished_assigned_p1.save()
         self.task_finished_assigned_p1.is_finished = False
+        self.task_finished_assigned_p1.save()
         self.task_finished_assigned_p1.is_finished = True
+        self.task_finished_assigned_p1.save()
         self.task_finished_assigned_p1.is_finished = False
+        self.task_finished_assigned_p1.save()
         self.task_finished_assigned_p1.is_finished = True
+        self.task_finished_assigned_p1.save()
 
         self.assertEqual(self.profile1.points, old_user_points)
 
