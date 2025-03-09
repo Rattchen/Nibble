@@ -147,7 +147,7 @@ class Task(models.Model):
             self.assigned_to.save()
         super().delete(*args, **kwargs)
         #For future me: remember that even after super().delete() you can access values with no need for caching in init
-       
+
     def get_priority_info(self):
         return self.PRIORITY_DETAILS.get(self.priority, {})
 
