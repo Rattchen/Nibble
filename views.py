@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.views.generic import TemplateView, DetailView, View
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models.functions import ExtractYear
 from .models import Board, Card, Column, NibbleProfile, Checklist, Task, TaskType
 from .forms import CardForm, ChecklistForm, TaskForm
@@ -25,7 +25,10 @@ class IndexView(TemplateView):
             context['user'] = user
             return context
 
-class BoardView(LoginRequiredMixin, DetailView):
+class BoardView(PermissionRequiredMixin, DetailView):
+
+    permission_required = 'nibble.view_board'
+
     model = Board
     template_name = 'nibble/board.html'
 
@@ -37,12 +40,25 @@ class BoardView(LoginRequiredMixin, DetailView):
             column.card_list = column.cards.all()
         return context
 
-class CardView(LoginRequiredMixin, DetailView):
+class CardView(PermissionRequiredMixin, DetailView):
     # TODO: rename to CardDetailView
+
+    permission_required = 'nibble.view_card'
+    
+    # BUT should add to context if permission(edit_card) so it can render buttons only if can
+
     model = Card
     template_name = 'nibble/card.html'
 
-class CardCreateView(LoginRequiredMixin, View):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["can_delete_task"] = self.request.user.has_perm('nibble.delete_task')
+        return context
+
+class CardCreateView(PermissionRequiredMixin, View):
+
+    permission_required = 'nibble.add_card'
+
     def post(self, request):
         form = CardForm(request.POST)
         if form.is_valid():
@@ -54,7 +70,10 @@ class CardCreateView(LoginRequiredMixin, View):
             return HttpResponse(response)
         return JsonResponse({"success":False, "errors":form.errors}, status=400)
 
-class CardEditView(LoginRequiredMixin, View):
+class CardEditView(PermissionRequiredMixin, View):
+
+    permission_required = 'nibble.change_card'
+    
     def get(self, request, card_id, field_name):
         card = get_object_or_404(Card, id=card_id)
         field_value = getattr(card, field_name)
@@ -88,7 +107,10 @@ class CardEditView(LoginRequiredMixin, View):
         response = render_to_string('nibble/forms/card_field.html', context)
         return HttpResponse(response)
 
-class ChecklistEditView(LoginRequiredMixin, View):
+class ChecklistEditView(PermissionRequiredMixin, View):
+
+    permission_required = 'nibble.edit_checklist'
+
     def get(self, request, checklist_id, field_name):
         checklist = get_object_or_404(Checklist, id=checklist_id)
         field_value = getattr(checklist, field_name)
@@ -112,7 +134,10 @@ class ChecklistEditView(LoginRequiredMixin, View):
         response = render_to_string('nibble/forms/checklist_field.html', context)
         return HttpResponse(response)
 
-class ChecklistCreateView(LoginRequiredMixin, View):
+class ChecklistCreateView(PermissionRequiredMixin, View):
+
+    permission_required = 'nibble.add_checklist'
+
     def post(self, request):
         form = ChecklistForm(request.POST)
         if form.is_valid():
@@ -122,7 +147,9 @@ class ChecklistCreateView(LoginRequiredMixin, View):
             return HttpResponse(response)
         return JsonResponse({"success":False, "errors":form.errors}, status=400)
 
-class TaskCreateView(LoginRequiredMixin, View):
+class TaskCreateView(PermissionRequiredMixin, View):
+    permission_required = 'nibble.add_tasktype'
+
     def get(self, request):
         checklist_id = request.GET['checklist_id']
 
@@ -144,7 +171,10 @@ class TaskCreateView(LoginRequiredMixin, View):
             print(form.errors) # Temporary line while working on the View
         return JsonResponse({"success":False, "errors":form.errors}, status=400)
 
-class TaskEditView(LoginRequiredMixin, View):
+class TaskEditView(PermissionRequiredMixin, View):
+
+    permission_required = 'nibble.change_task'
+
     def get(self, request, task_id, field_name):
         task = get_object_or_404(Task, id=task_id)
         field_value = getattr(task, field_name)
@@ -185,7 +215,10 @@ class TaskEditView(LoginRequiredMixin, View):
         response = render_to_string('nibble/partials/task.html', context)
         return HttpResponse(response)
 
-class TaskDeleteView(LoginRequiredMixin, View):
+class TaskDeleteView(PermissionRequiredMixin, View):
+
+    permission_required = 'nibble.delete_task'
+    
     def get(self, request, *args, **kwargs):
         task = get_object_or_404(Task, pk=self.kwargs['pk'])
         context={'task':task, 'checklist':task.checklist}
@@ -198,7 +231,10 @@ class TaskDeleteView(LoginRequiredMixin, View):
         return HttpResponse(status=200)
 
 
-class ProfileDetailView(LoginRequiredMixin, DetailView):
+class ProfileDetailView(PermissionRequiredMixin, DetailView):
+
+    permission_required = 'nibble.view_nibbleprofile'
+
     model = NibbleProfile
     template_name = 'nibble/profile.html'
     context_object_name = 'profile'
