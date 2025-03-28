@@ -15,16 +15,6 @@ class IndexView(TemplateView):
         user = self.request.user
         context['message'] = f'Hi, welcome to Nibble, {user.username}!'
         context['user'] = user
-        modules = []
-        
-        if apps.is_installed('scuffle'):
-            modules.append('scuffle')
-        if apps.is_installed('squeak'):
-            modules.append('squeak')        
-
-        context['modules'] = modules
-
-        print(modules)
         return context
 
 class BoardView(DetailView):

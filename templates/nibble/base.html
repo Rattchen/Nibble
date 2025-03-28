@@ -1,3 +1,4 @@
+{% load nibble_tags %}
 <!DOCTYPE html>
 <html data-bs-theme="dark">
 
@@ -107,6 +108,8 @@ li.task-finished label span {
       </button>
       <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          {% installed_apps as modules %}
+
           {% if modules %}
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
