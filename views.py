@@ -3,21 +3,29 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.views.generic import TemplateView, DetailView, View
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.functions import ExtractYear
 from .models import Board, Card, Column, NibbleProfile, Checklist, Task, TaskType
 from .forms import CardForm, ChecklistForm, TaskForm
 
 class IndexView(TemplateView):
-    template_name = 'nibble/index.html'
+
+    def get_template_names(self):
+        if self.request.user.is_anonymous:
+            template_name = 'nibble/index_anonymous.html'
+        else:
+            template_name = 'nibble/index.html'
+        return template_name
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        context['message'] = f'Hi, welcome to Nibble, {user.username}!'
-        context['user'] = user
-        return context
+        if self.request.user:
+            context = super().get_context_data(**kwargs)
+            user = self.request.user
+            context['message'] = f'Hi, welcome to Nibble, {user.username}!'
+            context['user'] = user
+            return context
 
-class BoardView(DetailView):
+class BoardView(LoginRequiredMixin, DetailView):
     model = Board
     template_name = 'nibble/board.html'
 
@@ -29,12 +37,12 @@ class BoardView(DetailView):
             column.card_list = column.cards.all()
         return context
 
-class CardView(DetailView):
+class CardView(LoginRequiredMixin, DetailView):
     # TODO: rename to CardDetailView
     model = Card
     template_name = 'nibble/card.html'
 
-class CardCreateView(View):
+class CardCreateView(LoginRequiredMixin, View):
     def post(self, request):
         form = CardForm(request.POST)
         if form.is_valid():
@@ -46,8 +54,7 @@ class CardCreateView(View):
             return HttpResponse(response)
         return JsonResponse({"success":False, "errors":form.errors}, status=400)
 
-
-class CardEditView(View):
+class CardEditView(LoginRequiredMixin, View):
     def get(self, request, card_id, field_name):
         card = get_object_or_404(Card, id=card_id)
         field_value = getattr(card, field_name)
@@ -81,7 +88,7 @@ class CardEditView(View):
         response = render_to_string('nibble/forms/card_field.html', context)
         return HttpResponse(response)
 
-class ChecklistEditView(View):
+class ChecklistEditView(LoginRequiredMixin, View):
     def get(self, request, checklist_id, field_name):
         checklist = get_object_or_404(Checklist, id=checklist_id)
         field_value = getattr(checklist, field_name)
@@ -105,7 +112,7 @@ class ChecklistEditView(View):
         response = render_to_string('nibble/forms/checklist_field.html', context)
         return HttpResponse(response)
 
-class ChecklistCreateView(View):
+class ChecklistCreateView(LoginRequiredMixin, View):
     def post(self, request):
         form = ChecklistForm(request.POST)
         if form.is_valid():
@@ -115,7 +122,7 @@ class ChecklistCreateView(View):
             return HttpResponse(response)
         return JsonResponse({"success":False, "errors":form.errors}, status=400)
 
-class TaskCreateView(View):
+class TaskCreateView(LoginRequiredMixin, View):
     def get(self, request):
         checklist_id = request.GET['checklist_id']
 
@@ -137,7 +144,7 @@ class TaskCreateView(View):
             print(form.errors) # Temporary line while working on the View
         return JsonResponse({"success":False, "errors":form.errors}, status=400)
 
-class TaskEditView(View):
+class TaskEditView(LoginRequiredMixin, View):
     def get(self, request, task_id, field_name):
         task = get_object_or_404(Task, id=task_id)
         field_value = getattr(task, field_name)
@@ -178,7 +185,7 @@ class TaskEditView(View):
         response = render_to_string('nibble/partials/task.html', context)
         return HttpResponse(response)
 
-class TaskDeleteView(View):
+class TaskDeleteView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         task = get_object_or_404(Task, pk=self.kwargs['pk'])
         context={'task':task, 'checklist':task.checklist}
@@ -191,7 +198,7 @@ class TaskDeleteView(View):
         return HttpResponse(status=200)
 
 
-class ProfileDetailView(DetailView):
+class ProfileDetailView(LoginRequiredMixin, DetailView):
     model = NibbleProfile
     template_name = 'nibble/profile.html'
     context_object_name = 'profile'
