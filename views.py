@@ -1,3 +1,4 @@
+from django.apps import apps
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
@@ -11,7 +12,19 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['message'] = 'Hi, welcome to Nibble'
+        user = self.request.user
+        context['message'] = f'Hi, welcome to Nibble, {user.username}!'
+        context['user'] = user
+        modules = []
+        
+        if apps.is_installed('scuffle'):
+            modules.append('scuffle')
+        if apps.is_installed('squeak'):
+            modules.append('squeak')        
+
+        context['modules'] = modules
+
+        print(modules)
         return context
 
 class BoardView(DetailView):
@@ -42,11 +55,7 @@ class CardCreateView(View):
             response = render_to_string('nibble/partials/card-small.html', context)
             return HttpResponse(response)
         return JsonResponse({"success":False, "errors":form.errors}, status=400)
-        """
-        card = get_object_or_404(Card, id=1)
-        context = {'card':card}
 
-        """
 
 class CardEditView(View):
     def get(self, request, card_id, field_name):

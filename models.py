@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 
 class NibbleProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="nibbleProfile")
     handle = models.CharField(max_length=30, unique=True) 
     # TODO: automatic creation and update when user changes their nickname
     points = models.IntegerField(default=0)
