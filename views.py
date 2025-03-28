@@ -6,7 +6,7 @@ from django.views.generic import TemplateView, DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models.functions import ExtractYear
 from .models import Board, Card, Column, NibbleProfile, Checklist, Task, TaskType
-from .forms import CardForm, ChecklistForm, TaskForm
+from .forms import CardForm, ChecklistForm, TaskForm, CommentForm
 
 class IndexView(TemplateView):
 
@@ -230,6 +230,21 @@ class TaskDeleteView(PermissionRequiredMixin, View):
         task.delete()
         return HttpResponse(status=200)
 
+class CommentCreateView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        form = CommentForm(request.POST)
+        print(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.card = get_object_or_404(Card, id=request.POST["card"])
+            comment.author = get_object_or_404(NibbleProfile, id=request.user.nibbleProfile.id)
+            comment.save()
+
+            response = f'<div class="comment-entry"> <div class="comment-date text-muted">{comment.datetime}</div> <span class="commenter"><img />👤 {comment.author.user.username}:</span> <span class="comment">{comment.content}</span> </div>'
+
+            return HttpResponse(response)
+        return JsonResponse({"success":False, "errors":form.errors}, status=400)
 
 class ProfileDetailView(PermissionRequiredMixin, DetailView):
 
