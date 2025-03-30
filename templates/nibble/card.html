@@ -104,7 +104,10 @@
                     {% for attachment in card.attachments.all %}
                     <li id="attachment-{{attachment.id}}">
                         <a href="{{attachment.url}}">{{attachment.name}}</a>
-                        <span hx-get="{% url 'nibble:attachment_edit' attachment.id %}" hx-target="this" hx-swap="outerHTML">🖋️</span>
+                        <button hx-get="{% url 'nibble:attachment_edit' attachment.id %}" hx-target="this" hx-swap="outerHTML">🖋️</span>
+                        {% if can_delete_attachment %}
+                        <button hx-post="{% url 'nibble:attachment_delete' attachment.id %}" hx-target="#deleteModal" hx-swap="outerHTML">🗑️</button>
+    {% endif %}
                     </li>
                     
                     {% empty %}

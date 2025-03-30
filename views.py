@@ -53,6 +53,7 @@ class CardView(PermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["can_delete_task"] = self.request.user.has_perm('nibble.delete_task')
+        context["can_delete_attachment"] = self.request.user.has_perm('nibble.delete_attachment')
         return context
 
 class CardCreateView(PermissionRequiredMixin, View):
@@ -140,6 +141,21 @@ class AttachmentEditView(PermissionRequiredMixin, View):
             response = f'<li> <a href="{attachment.url}">{attachment.name}</a> <span>🖋️</span></li>'
             return HttpResponse(response)
         return JsonResponse({"success":False, "errors":form.errors}, status=400)
+
+class AttachmentDeleteView(PermissionRequiredMixin, View):
+
+    permission_required = 'nibble.delete_attachment'
+    
+    def get(self, request, *args, **kwargs):
+        attachment = get_object_or_404(Attachment, pk=self.kwargs['pk'])
+        context={'attachment':attachment}
+        response = render_to_string('nibble/forms/attachment_delete_confirmation_modal.html', context)
+        return HttpResponse(response)
+
+    def delete(self, request, *args, **kwargs):
+        attachment = get_object_or_404(Attachment, pk=self.kwargs['pk'])
+        attachment.delete()
+        return HttpResponse(status=200)
 
 class ChecklistEditView(PermissionRequiredMixin, View):
 
