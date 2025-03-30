@@ -1,0 +1,1 @@
+<span class="comment {% if comment.author.user.id == user.id %}field-editable{% endif %}" hx-get="{% url 'nibble:comment_edit' comment.id %}" hx-target="this" hx-swap="outerHTML"> {{comment.content}} </span>

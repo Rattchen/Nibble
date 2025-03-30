@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import IndexView, BoardView, CardView, ProfileDetailView, CardEditView, ChecklistEditView, TaskEditView, CardCreateView, ChecklistCreateView, TaskCreateView, TaskDeleteView, CommentCreateView, AttachmentCreateView, AttachmentEditView, AttachmentDeleteView
+from .views import IndexView, BoardView, CardView, ProfileDetailView, CardEditView, ChecklistEditView, TaskEditView, CardCreateView, ChecklistCreateView, TaskCreateView, TaskDeleteView, CommentCreateView, AttachmentCreateView, AttachmentEditView, AttachmentDeleteView, CommentEditView, CommentDeleteView
 
 app_name = "nibble"
 
@@ -13,6 +13,8 @@ urlpatterns = [
     path('attachment/edit/<int:attachment_id>/', AttachmentEditView.as_view(), name="attachment_edit"),
     path('attachment/delete/<int:pk>', AttachmentDeleteView.as_view(), name="attachment_delete"),
     path('comment/create/', CommentCreateView.as_view(), name='comment_create'),
+    path('comment/edit/<int:comment_id>', CommentEditView.as_view(), name="comment_edit"),
+    path('comment/delete/<int:pk>', CommentDeleteView.as_view(), name="comment_delete"),
     path('checklist/create', ChecklistCreateView.as_view(), name="checklist_create"),
     path('checklist/edit/<int:checklist_id>/<str:field_name>/', ChecklistEditView.as_view(), name="checklist_edit"),
     path('task/create', TaskCreateView.as_view(), name="task_create"),

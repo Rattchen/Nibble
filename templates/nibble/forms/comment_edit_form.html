@@ -1,0 +1,7 @@
+<form hx-post="{% url 'nibble:comment_edit' comment.id %}" hx-target="#comment-{{comment.id}}-content" hx-swap="outerHTML" hx-on::after-request="this.reset()" class="swappableClass">
+    {% csrf_token %}
+      <textarea name="content">{{comment.content}}</textarea>
+      <input type="hidden" name="card" value="{{comment.card.id}}">
+      <input type="hidden" name="author" value="{{comment.author.id}}">
+      <button type="submit">💾</button>
+  </form>

@@ -11,10 +11,18 @@
 
 
         {% for comment in comments %}
-        <div class="comment-entry">
+        <div class="comment-entry" id="comment-{{comment.id}}">
             <div class="comment-date text-muted">{{comment.datetime}}</div>
             <span class="commenter"><img />👤 {{comment.author.user.username}}:</span>
-            <span class="comment">{{comment.content}}</span>
+            <span id="comment-{{comment.id}}-content">
+                <span class="comment {% if comment.author.user.id == user.id %}field-editable{% endif %}" hx-get="{% url 'nibble:comment_edit' comment.id %}" hx-target="this" hx-swap="outerHTML"> {{comment.content}} </span>
+            </span>
+
+
+            {% if comment.author.user.id == user.id %}
+                <button hx-delete="{% url 'nibble:comment_delete' comment.id %}" hx-target="#comment-{{comment.id}}" hx-swap="delete">🗑️</button>
+            {% endif %}
+
         </div>
         {% empty %}
         No comments yet!

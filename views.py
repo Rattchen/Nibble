@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from django.views.generic import TemplateView, DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models.functions import ExtractYear
-from .models import Board, Card, Column, NibbleProfile, Checklist, Task, TaskType, Attachment
+from .models import Board, Card, Column, NibbleProfile, Checklist, Task, TaskType, Attachment, Comment
 from .forms import CardForm, ChecklistForm, TaskForm, CommentForm, AttachmentForm
 
 class IndexView(TemplateView):
@@ -295,6 +295,45 @@ class CommentCreateView(LoginRequiredMixin, View):
 
             return HttpResponse(response)
         return JsonResponse({"success":False, "errors":form.errors}, status=400)
+
+class CommentEditView(LoginRequiredMixin, View):
+
+    def get(self, request, comment_id):
+        comment = get_object_or_404(Comment, id=comment_id)
+        if request.user.id == comment.author.user.id:
+            context = {"comment":comment}
+            response = render_to_string('nibble/forms/comment_edit_form.html', context)
+            return HttpResponse(response)
+        return HttpResponse(status=403)
+
+    def post(self, request, comment_id):
+        comment = get_object_or_404(Comment, id=comment_id)
+        if request.user.id == comment.author.user.id:
+            form = CommentForm(request.POST, instance=comment)
+            if form.is_valid():
+                comment = form.save()
+                #TODO: update time
+                #TODO: add "edited" flag
+                response = render_to_string('nibble/forms/comment_field.html', context={"comment":comment})
+                return HttpResponse(response)
+            return JsonResponse({"success":False, "errors":form.errors}, status=400)
+        return HttpResponse(status=403)
+
+class CommentDeleteView(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        comment = get_object_or_404(Comment, pk=self.kwargs['pk'])
+        context={'comment':comment}
+        response = render_to_string('nibble/forms/attachment_delete_confirmation_modal.html', context)
+        #TODO: Change the confirmation modal, unifying all modals
+        return HttpResponse(response)
+
+    def delete(self, request, *args, **kwargs):
+        comment = get_object_or_404(Comment, pk=self.kwargs['pk'])
+        if request.user.id == comment.author.user.id:
+            comment.delete()
+            return HttpResponse(status=200)
+        return HttpResponse(status=403)
 
 class ProfileDetailView(PermissionRequiredMixin, DetailView):
 
