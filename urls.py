@@ -21,6 +21,7 @@ urlpatterns = [
     # Checklist views
     path('checklist/create', views.ChecklistCreateView.as_view(), name="checklist_create"),
     path('checklist/edit/<int:checklist_id>/<str:field_name>/', views.ChecklistEditView.as_view(), name="checklist_edit"),
+    path('checklist/delete/<int:pk>', views.ChecklistDeleteView.as_view(), name="checklist_delete"),
     # Task views
     path('task/create', views.TaskCreateView.as_view(), name="task_create"),
     path('task/edit/<int:task_id>/<str:field_name>/', views.TaskEditView.as_view(), name="task_edit"),

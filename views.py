@@ -56,6 +56,7 @@ class CardView(PermissionRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context["can_delete_task"] = self.request.user.has_perm('nibble.delete_task')
         context["can_delete_attachment"] = self.request.user.has_perm('nibble.delete_attachment')
+        context["can_delete_checklist"] = self.request.user.has_perm('nibble.delete_checklist')
         return context
 
 class CardCreateView(PermissionRequiredMixin, View):
@@ -202,6 +203,23 @@ class ChecklistCreateView(PermissionRequiredMixin, View):
             response = render_to_string('nibble/partials/checklist.html', context)
             return HttpResponse(response)
         return JsonResponse({"success":False, "errors":form.errors}, status=400)
+
+class ChecklistDeleteView(PermissionRequiredMixin, View):
+    permission_required = 'nibble.delete_checklist'
+    
+    def get(self, request, *args, **kwargs):
+        checklist = get_object_or_404(Checklist, pk=self.kwargs['pk'])
+        context={'checklist':checklist}
+        response = render_to_string('nibble/forms/attachment_delete_confirmation_modal.html', context)
+        #TODO: Change the confirmation modal, unifying all modals
+        return HttpResponse(response)
+
+    def delete(self, request, *args, **kwargs):
+        checklist = get_object_or_404(Checklist, pk=self.kwargs['pk'])
+        # if request.user.id == checklist.card.owner.user.id OR if admin OR if no one is assigned
+        checklist.delete()
+        return HttpResponse(status=200)
+        #return HttpResponse(status=403)
 
 # Task views
 
