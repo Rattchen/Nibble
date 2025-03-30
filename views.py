@@ -5,8 +5,8 @@ from django.template.loader import render_to_string
 from django.views.generic import TemplateView, DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models.functions import ExtractYear
-from .models import Board, Card, Column, NibbleProfile, Checklist, Task, TaskType
-from .forms import CardForm, ChecklistForm, TaskForm, CommentForm
+from .models import Board, Card, Column, NibbleProfile, Checklist, Task, TaskType, Attachment
+from .forms import CardForm, ChecklistForm, TaskForm, CommentForm, AttachmentForm
 
 class IndexView(TemplateView):
 
@@ -106,6 +106,40 @@ class CardEditView(PermissionRequiredMixin, View):
             }
         response = render_to_string('nibble/forms/card_field.html', context)
         return HttpResponse(response)
+
+class AttachmentCreateView(PermissionRequiredMixin, View):
+
+    permission_required = 'nibble.add_attachment'
+
+    def post(self, request):
+        form = AttachmentForm(request.POST)
+        if form.is_valid():
+            attachment = form.save(commit=False)
+            attachment.card = get_object_or_404(Card, id=request.POST["card"])
+            attachment.save()
+            response = f'<li> <a href="{attachment.url}">{attachment.name}</a> <span>🖋️</span></li>'
+            return HttpResponse(response)
+        return JsonResponse({"success":False, "errors":form.errors}, status=400)
+
+class AttachmentEditView(PermissionRequiredMixin, View):
+
+    permission_required = 'nibble.change_attachment'
+
+    def get(self, request, attachment_id):
+        attachment = get_object_or_404(Attachment, id=attachment_id)
+        context = {"attachment_id":attachment.id, "name_value": attachment.name, "url_value": attachment.url, "card_id":attachment.card.id}
+        response = render_to_string('nibble/forms/attachment_form.html', context)
+        return HttpResponse(response)
+
+
+    def post(self, request, attachment_id):
+        attachment = get_object_or_404(Attachment, id=attachment_id)
+        form = AttachmentForm(request.POST, instance=attachment)
+        if form.is_valid():
+            attachment = form.save()
+            response = f'<li> <a href="{attachment.url}">{attachment.name}</a> <span>🖋️</span></li>'
+            return HttpResponse(response)
+        return JsonResponse({"success":False, "errors":form.errors}, status=400)
 
 class ChecklistEditView(PermissionRequiredMixin, View):
 

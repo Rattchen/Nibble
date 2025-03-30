@@ -1,0 +1,7 @@
+<form hx-post="{% url 'nibble:attachment_edit' attachment_id %}" hx-target="#attachment-{{attachment_id}}" hx-swap="outerHTML" class="swappableClass">
+    {% csrf_token %}
+    <input type="text" name="name" placeholder="Name" value="{{name_value}}" required>
+    <input type="url" name="url" placeholder="URL" value="{{url_value}}" autofocus required>
+    <input type="hidden" name="card" value="{{card_id}}">
+    <button type="submit">💾</button>
+  </form>

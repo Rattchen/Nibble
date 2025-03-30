@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Card, Checklist, Task, Comment
+from .models import Card, Checklist, Task, Comment, Attachment
 
 class CardForm(ModelForm):
     class Meta:
@@ -20,3 +20,8 @@ class CommentForm(ModelForm):
     class Meta:
         model = Comment
         fields = ['card', 'author', 'content']
+
+class AttachmentForm(ModelForm):
+    class Meta:
+        model = Attachment
+        fields = ['name', 'url', 'card']

@@ -62,7 +62,7 @@
 
     <div id="project-body">
         <div id="project-description">
-            <div id="">
+            <div id="info-header">
                 {% if card.owner %}
              
                 Owner: {% include "nibble/forms/card_field.html" with card_id=card.id field_name='owner' field_value=card.owner.avatar%} <a href="{% url 'nibble:profile' card.owner.handle %}">  {{card.owner.user.username}} </a> <br />
@@ -83,19 +83,37 @@
             </div>
             <br />
             <div class="attachments">
-                <h3>Attachments <button>+</button></h3>
-                <ul>
+
+                <h3>
+                    Attachments
+                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAddAttachment" aria-expanded="false" aria-controls="collapseAddAttachment"> + </button>
+                </h3>
+    
+                </p>
+                <div class="collapse" id="collapseAddAttachment">
+                    <form hx-post="{% url 'nibble:attachment_create' %}" hx-target="#attachments-list" hx-swap="beforeend" hx-on::after-request="this.reset(); bootstrap.Collapse.getInstance(document.getElementById('collapseAddAttachment')).hide()" class="swappableClass">
+                        {% csrf_token %}
+                          <input type="text" name="name" placeholder="Name" autofocus required>
+                          <input type="url" name="url" placeholder="URL" autofocus required>
+                          <input type="hidden" name="card" value="{{card.id}}">
+                          <button type="submit">💾</button>
+                      </form>
+                </div>
+
+                <ul id="attachments-list">
                     {% for attachment in card.attachments.all %}
-                    <li>
+                    <li id="attachment-{{attachment.id}}">
                         <a href="{{attachment.url}}">{{attachment.name}}</a>
-                        <span hx-get="{% url 'nibble:card_edit' card.id 'attachment' %}" hx-target="this" hx-swap="outerHTML">🖋️</span>
+                        <span hx-get="{% url 'nibble:attachment_edit' attachment.id %}" hx-target="this" hx-swap="outerHTML">🖋️</span>
                     </li>
                     
                     {% empty %}
-                    <p hx-get="{% url 'nibble:card_edit' card.id 'description' %}" hx-target="this" hx-swap="outerHTML"> No attachments added yet. </p>
+                    <p hx-get="{% url 'nibble:card_edit' card.id 'attachment' %}" hx-target="this" hx-swap="outerHTML"> No attachments added yet. </p>
                     {% endfor %}
                 </ul>
+
             </div>
+
             <br />
             <div id="description">
                 <h3>
@@ -110,6 +128,7 @@
                     {% endif %}
             </div>
         </div>
+
         <div id="project-lists-all">
             <h3>
                 Checklists
