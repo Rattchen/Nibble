@@ -40,6 +40,8 @@ class BoardView(PermissionRequiredMixin, DetailView):
             column.card_list = column.cards.all()
         return context
 
+# Card views
+
 class CardView(PermissionRequiredMixin, DetailView):
     # TODO: rename to CardDetailView
 
@@ -108,6 +110,8 @@ class CardEditView(PermissionRequiredMixin, View):
         response = render_to_string('nibble/forms/card_field.html', context)
         return HttpResponse(response)
 
+# Attachment views
+
 class AttachmentCreateView(PermissionRequiredMixin, View):
 
     permission_required = 'nibble.add_attachment'
@@ -157,6 +161,8 @@ class AttachmentDeleteView(PermissionRequiredMixin, View):
         attachment.delete()
         return HttpResponse(status=200)
 
+# Checklist views
+
 class ChecklistEditView(PermissionRequiredMixin, View):
 
     permission_required = 'nibble.edit_checklist'
@@ -196,6 +202,8 @@ class ChecklistCreateView(PermissionRequiredMixin, View):
             response = render_to_string('nibble/partials/checklist.html', context)
             return HttpResponse(response)
         return JsonResponse({"success":False, "errors":form.errors}, status=400)
+
+# Task views
 
 class TaskCreateView(PermissionRequiredMixin, View):
     permission_required = 'nibble.add_tasktype'
@@ -280,6 +288,8 @@ class TaskDeleteView(PermissionRequiredMixin, View):
         task.delete()
         return HttpResponse(status=200)
 
+# Comment views
+
 class CommentCreateView(LoginRequiredMixin, View):
 
     def post(self, request):
@@ -334,6 +344,8 @@ class CommentDeleteView(LoginRequiredMixin, View):
             comment.delete()
             return HttpResponse(status=200)
         return HttpResponse(status=403)
+
+# Profile views
 
 class ProfileDetailView(PermissionRequiredMixin, DetailView):
 
