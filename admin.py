@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Attachment, Board, Card, Checklist, Column, Label, Log, Task, NibbleProfile, Comment, TaskType
+from .models import Attachment, Board, Card, Checklist, Column, Label, Log, Task, NibbleProfile, Comment, TaskType, Archive
 
 admin.site.register(NibbleProfile)
 admin.site.register(Log)
@@ -12,3 +12,4 @@ admin.site.register(Label)
 admin.site.register(Checklist)
 admin.site.register(TaskType)
 admin.site.register(Task)
+admin.site.register(Archive)

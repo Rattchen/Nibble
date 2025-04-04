@@ -6,6 +6,7 @@ app_name = "nibble"
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
     path('board/<int:pk>', views.BoardView.as_view(), name='board'),
+    path('archive/<int:pk>', views.ArchiveView.as_view(), name='archive'),
     # Card views
     path('card/<int:pk>', views.CardView.as_view(), name='card'),
     path('card/create/', views.CardCreateView.as_view(), name='card_create'),

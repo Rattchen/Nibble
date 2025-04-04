@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from django.views.generic import TemplateView, DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models.functions import ExtractYear
-from .models import Board, Card, Column, NibbleProfile, Checklist, Task, TaskType, Attachment, Comment, Label
+from .models import Board, Card, Column, NibbleProfile, Checklist, Task, TaskType, Attachment, Comment, Label, Archive
 from .forms import CardForm, ChecklistForm, TaskForm, CommentForm, AttachmentForm
 
 class IndexView(TemplateView):
@@ -36,6 +36,21 @@ class BoardView(PermissionRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         board = self.get_object()
         context["columns"] = board.columns.all()
+        for column in context['columns']:
+            column.card_list = column.cards.all()
+        return context
+
+class ArchiveView(PermissionRequiredMixin, DetailView):
+    
+    permission_required = 'nibble.view_archive'
+    
+    model = Archive
+    template_name = 'nibble/archive.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        archive = self.get_object()
+        context["columns"] = archive.columns.all()
         for column in context['columns']:
             column.card_list = column.cards.all()
         return context
