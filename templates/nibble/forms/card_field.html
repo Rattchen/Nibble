@@ -1,5 +1,11 @@
-<span hx-get="{% url 'nibble:card_edit' card_id field_name %}" 
-hx-target="this" 
-hx-swap="outerHTML" class="field-editable">
-{{field_value}}
-</span>
+{% if field_name == "label" %}
+    {% for label in field_value.all %}
+        <span class="badge rounded-pill" style="background:{{label.color}}">{{label.name}}</span>
+    {% endfor %}
+{% else %}
+    <span hx-get="{% url 'nibble:card_edit' card_id field_name %}" 
+    hx-target="this" 
+    hx-swap="outerHTML" class="field-editable">
+        {{field_value}}
+    </span>
+{% endif %}

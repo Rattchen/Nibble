@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from django.views.generic import TemplateView, DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models.functions import ExtractYear
-from .models import Board, Card, Column, NibbleProfile, Checklist, Task, TaskType, Attachment, Comment
+from .models import Board, Card, Column, NibbleProfile, Checklist, Task, TaskType, Attachment, Comment, Label
 from .forms import CardForm, ChecklistForm, TaskForm, CommentForm, AttachmentForm
 
 class IndexView(TemplateView):
@@ -84,13 +84,18 @@ class CardEditView(PermissionRequiredMixin, View):
 
         context = {
             "card_id":card_id, "field_name":field_name, 
-            "field_value": field_value
+            "field_value": field_value  
             }
 
         if field_name == "owner" or field_name == "helper":
             user_list = NibbleProfile.objects.all()
             context["user_list"] = user_list
 
+        if field_name == "label":
+            label_list = Label.objects.all()
+            context["label_list"] = label_list
+            context["current_labels"] = card.label.all()
+        
         response = render_to_string('nibble/forms/card_edit_form.html', context)
         return HttpResponse(response)
     
@@ -100,6 +105,10 @@ class CardEditView(PermissionRequiredMixin, View):
         if field_name == "owner" or field_name == "helper":
             user = get_object_or_404(NibbleProfile, id=request.POST.get(field_name, "").strip())
             setattr(card, field_name, user)   
+        if field_name == "label":
+        
+            labels = Label.objects.filter(id__in=request.POST.getlist("label"))
+            card.label.set(labels)
         else:
             setattr(card, field_name, request.POST.get(field_name, "").strip())
 

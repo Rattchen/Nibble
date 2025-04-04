@@ -1,5 +1,6 @@
 <form hx-post="{% url 'nibble:card_edit' card_id field_name %}" hx-target="this" hx-swap="outerHTML" class="swappableClass">
   {% csrf_token %}
+
   {% if field_name == "due_datetime" %}
     <input type="datetime-local" name="{{field_name}}" value="{{field_value}}" autofocus>
   {% elif field_name == "owner" or field_name == "helper" %}
@@ -7,6 +8,15 @@
     <input type="radio" name="{{field_name}}" value="{{user.id}}">
       {{user.handle}}
     {%endfor%}
+    {% elif field_name == "label" %}
+    {% for label in label_list %}
+    <div style="display:inline">
+    <input class="form-check-input" type="checkbox" name="{{field_name}}" id="{{field_name}}-{{label.name}}" value="{{label.id}}" {%if label in current_labels%}checked{%endif%}>
+    <label class="form-check-label" for="{{field_name}}-{{label.name}}">
+      <span class="badge rounded-pill field-editable" style="background:{{label.color}}">{{label.name}}</span>
+    </label>
+  </div>
+    {% endfor %}
   {%else%}
     <input type="text" name="{{field_name}}" value="{{field_value}}" autofocus>
   {% endif %}

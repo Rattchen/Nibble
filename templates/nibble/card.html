@@ -29,10 +29,12 @@
     </div>
     <div class="project-header">
         <div class="labels">
-            {% for label in card.label.all %}
-            <span class="badge rounded-pill" style="background:{{label.color}}">{{label.name}}</span>
-            {% endfor %}            
-            <button>+</button>
+            <div id="label-list" style="display:inline">
+                {% for label in card.label.all %}
+                    <span class="badge rounded-pill" style="background:{{label.color}}">{{label.name}}</span>
+                {% endfor %}            
+            </div>
+            <button hx-get="{% url 'nibble:card_edit' card.id 'label' %}" hx-target="#label-list" hx-swap="innerHTML">+</button>
         </div>
         <div>
             <nav aria-label="breadcrumb">
